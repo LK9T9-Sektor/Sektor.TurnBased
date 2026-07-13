@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/GameCore/">
+    <Project Path="src/GameCore/Sektor.TurnBased.GameCore/Sektor.TurnBased.GameCore.csproj" />
+  </Folder>
+</Solution>
