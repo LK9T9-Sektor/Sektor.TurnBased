@@ -20,7 +20,7 @@ public sealed class ActorTemplateRepository
 
     public void Register(IEnumerable<BaseActorTemplate> templates)
     {
-        foreach (var template in templates)
+        foreach (BaseActorTemplate template in templates)
         {
             if (!string.IsNullOrWhiteSpace(template.Id))
                 _actors[template.Id] = template;
@@ -29,7 +29,7 @@ public sealed class ActorTemplateRepository
 
     public Result<T> Get<T>(string id) where T : BaseActorTemplate
     {
-        if (!_actors.TryGetValue(id, out var template))
+        if (!_actors.TryGetValue(id, out BaseActorTemplate? template))
             return Result<T>.Failure($"Actor template '{id}' not found.");
 
         return template is T typed
@@ -39,7 +39,7 @@ public sealed class ActorTemplateRepository
 
     public bool TryGet<T>(string id, out T? template) where T : BaseActorTemplate
     {
-        if (_actors.TryGetValue(id, out var raw) && raw is T typed)
+        if (_actors.TryGetValue(id, out BaseActorTemplate? raw) && raw is T typed)
         {
             template = typed;
             return true;

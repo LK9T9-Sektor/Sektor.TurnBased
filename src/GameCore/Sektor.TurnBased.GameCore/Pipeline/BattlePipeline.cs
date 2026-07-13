@@ -1,15 +1,15 @@
 ﻿using Sektor.TurnBased.GameCore.Extensions;
 using Sektor.TurnBased.GameCore.States;
 
-namespace Sektor.TurnBased.GameCore.Battles;
+namespace Sektor.TurnBased.GameCore.Pipeline;
 
 /// <summary>
-/// Исполняет цепочку шагов боя.
-/// Реализует паттерн Chain of Responsibility.
+/// Исполнитель цепочки шагов боя. Реализует Chain of Responsibility.
+/// Не содержит игровой логики, только управляет переходами между шагами.
 /// </summary>
 public sealed class BattlePipeline(BattleState state)
 {
-    private readonly Dictionary<string, IBattleStep> _steps = new();
+    private readonly Dictionary<string, IBattleStep> _steps = [];
 
     public string? CurrentStepId => state.CurrentStepId;
     public IBattleStep? CurrentStep =>
@@ -32,20 +32,15 @@ public sealed class BattlePipeline(BattleState state)
         return Result<bool>.Success(true);
     }
 
-    /// <summary>
-    /// Выполняет текущий шаг и переходит к следующему.
-    /// </summary>
     public Result<bool> Advance()
     {
         IBattleStep? step = CurrentStep;
-        if (step is null)
-            return Result<bool>.Failure("No active step.");
+        if (step is null) return Result<bool>.Failure("No active step.");
 
         step.OnExit(state);
         string? nextId = step.Execute(state);
 
-        if (nextId is null)
-            return Result<bool>.Success(true); // Пауза: ждём ввода
+        if (nextId is null) return Result<bool>.Success(true);
 
         if (!_steps.ContainsKey(nextId))
             return Result<bool>.Failure($"Next step '{nextId}' not registered.");

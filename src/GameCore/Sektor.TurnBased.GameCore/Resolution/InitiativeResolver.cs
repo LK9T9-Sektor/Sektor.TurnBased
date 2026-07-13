@@ -1,28 +1,21 @@
-﻿using Sektor.TurnBased.GameCore.Actors;
-using Sektor.TurnBased.GameCore.Rng;
+﻿using Sektor.TurnBased.GameCore.Entities;
 
 namespace Sektor.TurnBased.GameCore.Resolution;
 
 /// <summary>
-/// Вычисляет очередность ходов на основе характеристик актёров.
-/// Реализует стратегию расчёта инициативы.
+/// Вычисляет очередь ходов на основе атрибутов актёров.
+/// Стратегия сортировки вынесена сюда, чтобы ядро не зависело от конкретной формулы.
 /// </summary>
 public sealed class InitiativeResolver
 {
-    /// <summary>
-    /// Генерирует список ID актёров в порядке их хода.
-    /// Формула: BaseSpeed + случайный бонус (1..8).
-    /// </summary>
-    public List<string> Resolve<TTemplate>(
-        IEnumerable<BattleActor<TTemplate>> actors,
-        IRngService rng) where TTemplate : BaseActorTemplate
+    public List<string> Resolve(IEnumerable<BattleActor> actors, IRngService rng)
     {
         return actors
             .Where(a => !a.IsDead)
             .Select(a => new
             {
                 Id = a.Id,
-                Initiative = a.Template.BaseSpeed + rng.Next(1, 9)
+                Initiative = a.GetAttribute<int>("Speed") + rng.Next(1, 9)
             })
             .OrderByDescending(x => x.Initiative)
             .Select(x => x.Id)

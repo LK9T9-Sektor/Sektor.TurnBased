@@ -5,6 +5,7 @@ namespace Sektor.TurnBased.GameCore.Extensions;
 
 /// <summary>
 /// Высокопроизводительная обёртка результата без исключений.
+/// Используется для безопасной передачи значений или ошибок в транзакционных операциях.
 /// </summary>
 public readonly struct Result<T>
 {

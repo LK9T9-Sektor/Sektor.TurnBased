@@ -1,4 +1,4 @@
-﻿namespace Sektor.TurnBased.GameCore.Rng;
+﻿namespace Sektor.TurnBased.GameCore.Resolution;
 
 /// <summary>
 /// Абстракция для генерации случайных чисел.

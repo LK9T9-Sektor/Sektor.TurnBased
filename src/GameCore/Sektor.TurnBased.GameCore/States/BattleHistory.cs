@@ -1,13 +1,12 @@
 ﻿using Sektor.TurnBased.GameCore.Extensions;
-using Sektor.TurnBased.GameCore.States;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Sektor.TurnBased.GameCore.Battles;
+namespace Sektor.TurnBased.GameCore.States;
 
 /// <summary>
-/// Хранит историю снимков состояния боя для отката ходов.
-/// Реализует паттерн Memento.
+/// Хранит снимки состояния боя для отката ходов. Паттерн Memento.
+/// Работает исключительно с BattleState через JSON-сериализацию.
 /// </summary>
 public sealed class BattleHistory
 {
@@ -31,7 +30,7 @@ public sealed class BattleHistory
 
         BattleState? restored = JsonSerializer.Deserialize<BattleState>(json, _jsonOptions);
         if (restored is null)
-            return Result<bool>.Failure("Failed to deserialize snapshot.");
+            return Result<bool>.Failure("Deserialization failed.");
 
         CopyState(restored, state);
         return Result<bool>.Success(true);
@@ -41,7 +40,6 @@ public sealed class BattleHistory
     {
         target.TurnNumber = source.TurnNumber;
         target.Seed = source.Seed;
-        target.CurrentStepId = source.CurrentStepId;
         target.ActiveActorId = source.ActiveActorId;
         target.ActorIds.Clear(); target.ActorIds.AddRange(source.ActorIds);
         target.TurnOrder.Clear(); target.TurnOrder.AddRange(source.TurnOrder);

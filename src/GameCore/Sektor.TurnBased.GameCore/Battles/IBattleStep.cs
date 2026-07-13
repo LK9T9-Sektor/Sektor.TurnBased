@@ -1,4 +1,6 @@
-﻿namespace Sektor.TurnBased.GameCore.Battles;
+﻿using Sektor.TurnBased.GameCore.States;
+
+namespace Sektor.TurnBased.GameCore.Battles;
 
 /// <summary>
 /// Базовый контракт шага пайплайна.

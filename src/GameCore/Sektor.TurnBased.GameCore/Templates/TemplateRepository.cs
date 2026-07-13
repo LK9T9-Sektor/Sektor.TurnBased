@@ -27,27 +27,35 @@ public sealed class TemplateRepository
 
     public void RegisterActors(IEnumerable<BaseActorTemplate> templates)
     {
-        foreach (var t in templates) RegisterActor(t);
+        foreach (BaseActorTemplate t in templates) RegisterActor(t);
     }
 
     public void RegisterActions(IEnumerable<BaseActionTemplate> templates)
     {
-        foreach (var t in templates) RegisterAction(t);
+        foreach (BaseActionTemplate t in templates) RegisterAction(t);
     }
 
     public Result<T> GetActor<T>(string id) where T : BaseActorTemplate
     {
-        if (!_actors.TryGetValue(id, out var t)) return Result<T>.Failure($"Actor '{id}' not found.");
-        if (t is not T typed) return Result<T>.Failure($"Type mismatch for '{id}'.");
+        if (!_actors.TryGetValue(id, out BaseActorTemplate? t))
+            return Result<T>.Failure($"Actor '{id}' not found.");
+        if (t is not T typed)
+            return Result<T>.Failure($"Type mismatch for '{id}'.");
         return Result<T>.Success(typed);
     }
 
     public Result<T> GetAction<T>(string id) where T : BaseActionTemplate
     {
-        if (!_actions.TryGetValue(id, out var t)) return Result<T>.Failure($"Action '{id}' not found.");
-        if (t is not T typed) return Result<T>.Failure($"Type mismatch for '{id}'.");
+        if (!_actions.TryGetValue(id, out BaseActionTemplate? t))
+            return Result<T>.Failure($"Action '{id}' not found.");
+        if (t is not T typed)
+            return Result<T>.Failure($"Type mismatch for '{id}'.");
         return Result<T>.Success(typed);
     }
 
-    public void Clear() { _actors.Clear(); _actions.Clear(); }
+    public void Clear()
+    {
+        _actors.Clear();
+        _actions.Clear();
+    }
 }
