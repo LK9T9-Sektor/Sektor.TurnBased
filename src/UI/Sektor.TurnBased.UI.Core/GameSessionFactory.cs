@@ -19,7 +19,8 @@ public static class GameSessionFactory
     private static readonly IReadOnlyDictionary<string, Func<GameContext, ContentRegistry, Result<GameSession>>> Builders =
         new Dictionary<string, Func<GameContext, ContentRegistry, Result<GameSession>>>
         {
-            [GameKinds.Battle] = (context, content) => BuildBattle(context, content),
+            [GameKinds.Battle] = (context, content) => BuildBattle(GameKinds.Battle, context, content),
+            [GameKinds.BattleLine] = (context, content) => BuildBattle(GameKinds.BattleLine, context, content),
             [GameKinds.Dialog] = (context, content) => BuildDialog(context, content),
         };
 
@@ -53,7 +54,7 @@ public static class GameSessionFactory
         return builder(context, content);
     }
 
-    private static Result<GameSession> BuildBattle(GameContext context, ContentRegistry content)
+    private static Result<GameSession> BuildBattle(string kind, GameContext context, ContentRegistry content)
     {
         var battleContent = BattleContentCatalog.Build(content);
         if (battleContent.IsFailure)
@@ -64,7 +65,8 @@ public static class GameSessionFactory
             content,
             battleContent.Value!,
             new BattleConfig("initiative", "extermination"),
-            DefaultDisplayNames);
+            DefaultDisplayNames,
+            kind);
         return session.TryGetValue(out var value)
             ? Result<GameSession>.Success(value)
             : Result<GameSession>.Failure(session.Error!);

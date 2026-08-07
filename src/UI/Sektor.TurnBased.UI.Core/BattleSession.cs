@@ -15,32 +15,36 @@ public sealed class BattleSession : GameSession
 {
     private readonly BattleEngine _engine;
 
-    public override string Kind => GameKinds.Battle;
+    public override string Kind { get; }
 
     private BattleSession(
+        string kind,
         GameContext context,
         BattleEngine engine,
         IReadOnlyDictionary<string, string>? displayNames)
         : base(context, engine.Pipeline, displayNames)
     {
+        Kind = kind;
         _engine = engine;
     }
 
     /// <summary>
     /// Создаёт бой: валидирует контент и регистрирует фазы (обёртка над BattleEngine.Create).
+    /// Kind — разновидность боя (GameKinds.Battle / BattleLine); движок одинаков, отличается UI.
     /// </summary>
     public static Result<BattleSession> Create(
         GameContext context,
         ContentRegistry content,
         BattleContent battleContent,
         BattleConfig config,
-        IReadOnlyDictionary<string, string>? displayNames = null)
+        IReadOnlyDictionary<string, string>? displayNames = null,
+        string kind = GameKinds.Battle)
     {
         var engineResult = BattleEngine.Create(context, content, battleContent, config);
         if (engineResult.IsFailure)
             return Result<BattleSession>.Failure(engineResult.Error!);
 
-        return Result<BattleSession>.Success(new BattleSession(context, engineResult.Value!, displayNames));
+        return Result<BattleSession>.Success(new BattleSession(kind, context, engineResult.Value!, displayNames));
     }
 
     /// <summary>Снапшот состояния боя для отображения.</summary>

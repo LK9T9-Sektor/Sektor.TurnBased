@@ -24,6 +24,7 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
     private readonly NavigationManager _navigation;
     private readonly UnitInfoViewModel _unitInfo;
     private readonly ConfirmationViewModel _confirmation;
+    private readonly SettingsViewModel _settings;
     private readonly IReadOnlyDictionary<string, Func<VisualEvent, string>> _formatters;
     private readonly ObservableCollection<string> _logLines = new();
     private int _logCount;
@@ -64,16 +65,27 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
     /// <summary>Полный текстовый журнал игры.</summary>
     public IReadOnlyList<string> LogLines => _logLines;
 
+    /// <summary>Очередь ходов текущего раунда (общий контрол для всех раскладок боя).</summary>
+    public ObservableCollection<TurnOrderItemViewModel> TurnQueue { get; } = new();
+
+    /// <summary>Общие настройки UX (подтверждение хода, пульсация, виньетка).</summary>
+    public SettingsViewModel Settings => _settings;
+
+    /// <summary>true — бой в одну линию (стиль Blades), false — две линии с карточками.</summary>
+    public bool IsSingleLineLayout => _session.Kind == GameKinds.BattleLine;
+
     public BattleViewModel(
         BattleSession session,
         NavigationManager navigation,
         UnitInfoViewModel unitInfo,
-        ConfirmationViewModel confirmation)
+        ConfirmationViewModel confirmation,
+        SettingsViewModel settings)
     {
         _session = session;
         _navigation = navigation;
         _unitInfo = unitInfo;
         _confirmation = confirmation;
+        _settings = settings;
         _formatters = new Dictionary<string, Func<VisualEvent, string>>
         {
             ["TurnStart"] = v => $"Ход: {ActorName(v.SourceRuntimeId)}",
@@ -147,7 +159,10 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
             return;
 
         var command = new SkipTurnCommand(actorId);
-        _confirmation.Request("Завершить ход?", () => StepAsync(() => _session.Submit(command)));
+        if (_settings.ConfirmEndTurn)
+            _confirmation.Request("Завершить ход?", () => StepAsync(() => _session.Submit(command)));
+        else
+            _ = StepAsync(() => _session.Submit(command));
     }
 
     [RelayCommand]
@@ -254,8 +269,25 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
         PendingAction = null;
         IsAwaitingTarget = false;
         SelectedTargetId = null;
+        RefreshTurnQueue();
         RefreshLog();
         EndTurnCommand.NotifyCanExecuteChanged();
+    }
+
+    private void RefreshTurnQueue()
+    {
+        TurnQueue.Clear();
+        if (Snapshot is not { } snap)
+            return;
+
+        var index = snap.TurnIndex;
+        for (var i = 0; i < snap.TurnOrder.Count; i++)
+        {
+            var unit = snap.Actors.FirstOrDefault(a => a.RuntimeId == snap.TurnOrder[i]);
+            if (unit is null)
+                continue;
+            TurnQueue.Add(new TurnOrderItemViewModel(unit, isActive: i == index, hasActed: i < index));
+        }
     }
 
     private UnitCardViewModel CreateCard(UnitSnapshot unit, string? activeId)

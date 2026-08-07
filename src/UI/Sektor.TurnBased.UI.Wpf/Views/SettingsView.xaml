@@ -1,0 +1,36 @@
+<UserControl x:Class="Sektor.TurnBased.UI.Wpf.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Visibility="{Binding IsOpen, Converter={StaticResource BoolToVisibility}}">
+        <Border Background="{StaticResource OverlayBrush}" />
+        <Border Style="{StaticResource Card}"
+                Width="400"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+            <StackPanel>
+                <DockPanel>
+                    <Button Content="×"
+                            Command="{Binding ToggleCommand}"
+                            Style="{StaticResource NeutralButton}"
+                            DockPanel.Dock="Right"
+                            Padding="10,4" />
+                    <TextBlock Text="Настройки"
+                               Style="{StaticResource PageTitle}"
+                               VerticalAlignment="Center" />
+                </DockPanel>
+                <TextBlock Text="Эффекты интерфейса:"
+                           Style="{StaticResource SectionTitle}"
+                           Margin="0,18,0,8" />
+                <CheckBox Content="Подтверждать конец хода"
+                          IsChecked="{Binding ConfirmEndTurn}" />
+                <CheckBox Content="Пульсация активного юнита"
+                          IsChecked="{Binding PulseEffects}" />
+                <CheckBox Content="Кровавая виньетка по краям поля боя"
+                          IsChecked="{Binding RedVignette}" />
+                <TextBlock Text="Изменения применяются сразу."
+                           Style="{StaticResource MutedText}"
+                           Margin="0,6,0,0" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

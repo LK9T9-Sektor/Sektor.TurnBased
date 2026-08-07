@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Sektor.TurnBased.Core.Abstractions;
@@ -8,8 +9,9 @@ using Sektor.TurnBased.UI.ViewModels.Shared;
 namespace Sektor.TurnBased.UI.ViewModels.Lobby;
 
 /// <summary>
-/// Лобби: выбор игры и seed, запуск сессии и переход к игровой VM. Кооп — заглушка
-/// (сеть отдельным этапом). Запуск через инжектированные фабрики, без событий.
+/// Лобби: выбор режима боя (два ряда / одна линия) или диалога карточками
+/// вместо выпадающего списка, ввод seed и запуск сессии. Запуск через
+/// инжектированные фабрики, без событий.
 /// </summary>
 public sealed partial class LobbyViewModel : ObservableObject
 {
@@ -18,7 +20,7 @@ public sealed partial class LobbyViewModel : ObservableObject
     private readonly Func<GameSession, IGameViewModel> _viewModelFactory;
 
     [ObservableProperty]
-    private string selectedGame = GameKinds.Battle;
+    private LobbyGameOption? selectedOption;
 
     [ObservableProperty]
     private string seedText = "42";
@@ -26,8 +28,8 @@ public sealed partial class LobbyViewModel : ObservableObject
     [ObservableProperty]
     private string? error;
 
-    /// <summary>Доступные игры (заголовки лобби).</summary>
-    public IReadOnlyList<string> Games { get; } = GameKinds.All;
+    /// <summary>Доступные варианты игр (карточки лобби).</summary>
+    public ObservableCollection<LobbyGameOption> Options { get; } = new();
 
     /// <summary>Кооп-режим ещё не реализован (сеть отдельным этапом).</summary>
     public bool IsCoopAvailable => false;
@@ -40,12 +42,47 @@ public sealed partial class LobbyViewModel : ObservableObject
         _navigation = navigation;
         _sessionFactory = sessionFactory;
         _viewModelFactory = viewModelFactory;
+
+        Options.Add(new LobbyGameOption(
+            GameKinds.Battle,
+            "Бой · Два ряда",
+            "Информативные карточки юнитов: две линии, статы и статусы внутри"));
+        Options.Add(new LobbyGameOption(
+            GameKinds.BattleLine,
+            "Бой · Одна линия",
+            "Минимализм в духе Blades: иконка, имя и полоса ХП снизу"));
+        Options.Add(new LobbyGameOption(
+            GameKinds.Dialog,
+            "Диалог",
+            "Ветвящийся квест с вариантами ответов и флагами"));
+
+        SelectedOption = Options[0];
+        SelectedOption.IsSelected = true;
+    }
+
+    partial void OnSelectedOptionChanged(LobbyGameOption? value)
+    {
+        foreach (var option in Options)
+            option.IsSelected = ReferenceEquals(option, value);
+    }
+
+    [RelayCommand]
+    private void SelectOption(LobbyGameOption? option)
+    {
+        if (option is not null)
+            SelectedOption = option;
     }
 
     [RelayCommand]
     private void Start()
     {
-        var created = _sessionFactory(SelectedGame, ParseSeed());
+        if (SelectedOption is not { } option)
+        {
+            Error = "Выберите игру.";
+            return;
+        }
+
+        var created = _sessionFactory(option.Kind, ParseSeed());
         if (created.IsFailure)
         {
             Error = created.Error;

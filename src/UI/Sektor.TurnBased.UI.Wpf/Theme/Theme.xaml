@@ -8,17 +8,69 @@
                     xmlns:converters="clr-namespace:Sektor.TurnBased.UI.Wpf.Theme"
                     xmlns:controls="clr-namespace:Sektor.TurnBased.UI.Wpf.Controls">
 
-    <!-- Кисти -->
-    <SolidColorBrush x:Key="BgBrush" Color="#15151A" />
-    <SolidColorBrush x:Key="PanelBrush" Color="#1F1F26" />
-    <SolidColorBrush x:Key="PanelBorderBrush" Color="#34343E" />
-    <SolidColorBrush x:Key="AccentBrush" Color="#E8A94E" />
-    <SolidColorBrush x:Key="PlayerBrush" Color="#2F6B94" />
-    <SolidColorBrush x:Key="EnemyBrush" Color="#963D3D" />
-    <SolidColorBrush x:Key="TextBrush" Color="#F2F2F4" />
-    <SolidColorBrush x:Key="MutedTextBrush" Color="#B8B8C4" />
-    <SolidColorBrush x:Key="DangerBrush" Color="#F07878" />
+    <!-- Палитра (стиль Blades): тёмная бронза, золото, сталь и кровь -->
+    <SolidColorBrush x:Key="BgBrush" Color="#1E242B" />
+    <SolidColorBrush x:Key="PanelBrush" Color="#2B1A10" />
+    <SolidColorBrush x:Key="PanelBorderBrush" Color="#3D2B1F" />
+    <SolidColorBrush x:Key="AccentBrush" Color="#D4AF37" />
+    <SolidColorBrush x:Key="TitleBrush" Color="#E8A34D" />
+    <SolidColorBrush x:Key="PlayerBrush" Color="#4682B4" />
+    <SolidColorBrush x:Key="EnemyBrush" Color="#800000" />
+    <SolidColorBrush x:Key="TextBrush" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="MutedTextBrush" Color="#C4AE82" />
+    <SolidColorBrush x:Key="DangerBrush" Color="#E53935" />
     <SolidColorBrush x:Key="OverlayBrush" Color="#A0181818" />
+    <SolidColorBrush x:Key="ActiveBrush" Color="#00FFFF" />
+    <SolidColorBrush x:Key="VsBrush" Color="#8B0000" />
+    <SolidColorBrush x:Key="HpBrush" Color="#4CAF50" />
+
+    <!-- Фон поля боя (радиальный градиент, как в Blades) -->
+    <RadialGradientBrush x:Key="BattlefieldBrush"
+                         Center="0.5,0.5"
+                         RadiusX="0.7"
+                         RadiusY="0.7">
+        <GradientStop Color="#1E242B"
+                      Offset="0" />
+        <GradientStop Color="#14181D"
+                      Offset="1" />
+    </RadialGradientBrush>
+
+    <!-- Кровавая виньетка по краям поля боя -->
+    <RadialGradientBrush x:Key="BloodVignetteBrush"
+                         Center="0.5,0.5"
+                         RadiusX="0.7"
+                         RadiusY="0.7"
+                         GradientOrigin="0.5,0.5">
+        <GradientStop Color="Transparent"
+                      Offset="0.5" />
+        <GradientStop Color="#99AA0000"
+                      Offset="1" />
+    </RadialGradientBrush>
+
+    <!-- Градиент панелей (верхняя/нижняя, как в Blades) -->
+    <LinearGradientBrush x:Key="PanelGradientBrush"
+                         EndPoint="1,0.5"
+                         StartPoint="0,0.5">
+        <GradientStop Color="#2B1A10"
+                      Offset="0" />
+        <GradientStop Color="#3D2B1F"
+                      Offset="0.5" />
+        <GradientStop Color="#2B1A10"
+                      Offset="1" />
+    </LinearGradientBrush>
+
+    <!-- Глиф-иконки юнитов (геометрии из Blades) -->
+    <Geometry x:Key="IconCircle">M 12,2 A 10,10 0 1 0 12,22 A 10,10 0 1 0 12,2 Z</Geometry>
+    <Geometry x:Key="IconDrop">M12,2 S6,8.5 6,12.5 A6,6 0 1,0 18,12.5 S12,2 12,2 Z</Geometry>
+    <Geometry x:Key="IconVSX">M20,6.91L17.09,4L12,9.09L6.91,4L4,6.91L9.09,12L4,17.09L6.91,20L12,14.91L17.09,20L20,17.09L14.91,12L20,6.91Z</Geometry>
+    <Geometry x:Key="IconSkeleton">M12,2C7.58,2 4,5.58 4,10C4,12.11 4.82,14.03 6.16,15.46L6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19L17.84,15.46C19.18,14.03 20,12.11 20,10C20,5.58 16.42,2 12,2M9,9A2,2 0 0,1 11,11A2,2 0 0,1 9,13A2,2 0 0,1 7,11A2,2 0 0,1 9,9M15,9A2,2 0 0,1 17,11A2,2 0 0,1 15,13A2,2 0 0,1 13,11A2,2 0 0,1 15,9M10,17H14V19H10V17Z</Geometry>
+    <Geometry x:Key="IconSkeletonMage">M12,2L3,9V11H21V9L12,2M12,12C7.58,12 4,15.58 4,20C4,22.11 4.82,24.03 6.16,25.46L6,29A2,2 0 0,0 8,31H16A2,2 0 0,0 18,29L17.84,25.46C19.18,24.03 20,22.11 20,20C20,15.58 16.42,12 12,12M9,19A2,2 0 0,1 11,21A2,2 0 0,1 9,23A2,2 0 0,1 7,21A2,2 0 0,1 9,19M15,19A2,2 0 0,1 17,21A2,2 0 0,1 15,23A2,2 0 0,1 13,21A2,2 0 0,1 15,19Z</Geometry>
+    <Geometry x:Key="IconTombstone">M12,2A9,9 0 0,0 3,11V22H21V11A9,9 0 0,0 12,2M12,4A7,7 0 0,1 19,11V20H15V17H13V20H11V17H9V20H5V11A7,7 0 0,1 12,4M11,7V9H9V11H11V14H13V11H15V9H13V7H11Z</Geometry>
+    <Geometry x:Key="IconZombie">M16,21H8A1,1 0 0,1 7,20V19C7,18.9 7,18.8 7,18.7L8.2,14.5C7,13.9 6.2,12.7 6,11.3C5.8,9.7 6.6,8.2 8,7.4V3A1,1 0 0,1 9,2H10A1,1 0 0,1 11,3V6H12V4A1,1 0 0,1 13,3H14A1,1 0 0,1 15,4V7H16V5A1,1 0 0,1 17,4H18A1,1 0 0,1 19,5V11C19,13.2 17.8,15.1 16,16.2V20A1,1 0 0,1 15,21H16Z</Geometry>
+    <Geometry x:Key="IconArcher">M4,12 C4,12 8,2 14,2 M4,12 C4,12 8,22 14,22 M14,2 L10,12 L14,22 M18,9 L22,12 L18,15</Geometry>
+    <Geometry x:Key="IconPriestess">M12,2A5,5 0 0,0 7,7C7,9.39 8.71,11.38 11,11.89V14H8V16H11V22H13V16H16V14H13V11.89C15.29,11.38 17,9.39 17,7A5,5 0 0,0 12,2M12,4A3,3 0 0,1 15,7A3,3 0 0,1 12,10A3,3 0 0,1 9,7A3,3 0 0,1 12,4Z</Geometry>
+    <Geometry x:Key="IconShield">M12,2L4.5,5V10C4.5,14.6 7.7,18.9 12,20C16.3,18.9 19.5,14.6 19.5,10V5L12,2M17.5,10C17.5,13.6 15.1,16.9 12,18C8.9,16.9 6.5,13.6 6.5,10V6.3L12,4.1L17.5,6.3V10Z</Geometry>
+    <Geometry x:Key="IconDagger">M12.5,2.5 C12,3 9,8 9,11 C9,13.5 10.5,15.5 11,16 L11,18 L8,18 L8,20 L11,20 L11,22 L13,22 L13,20 L16,20 L16,18 L13,18 L13,16 C13.5,15.5 15,13.5 15,11 C15,8 12.5,3 12.5,2.5 M12,14 C11,14 10,12.5 10,11 C10,9 11.5,5 12,4 C12.5,5 14,9 14,11 C14,12.5 13,14 12,14 Z</Geometry>
 
     <!-- Конвертеры -->
     <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
@@ -28,6 +80,8 @@
     <converters:TeamToBrushConverter x:Key="TeamToBrush"
                                     Player="{StaticResource PlayerBrush}"
                                     Enemy="{StaticResource EnemyBrush}" />
+    <converters:StringToBrushConverter x:Key="StringToBrush" />
+    <converters:IconKeyToGeometryConverter x:Key="IconToGeometry" />
 
     <!-- Размеры -->
     <sys:Double x:Key="FontSizePageTitle">20</sys:Double>
@@ -41,6 +95,7 @@
         <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
     </Style>
     <Style x:Key="PageTitle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource TitleBrush}" />
         <Setter Property="FontSize" Value="{StaticResource FontSizePageTitle}" />
         <Setter Property="FontWeight" Value="Bold" />
     </Style>
@@ -84,6 +139,7 @@
     <Style x:Key="UnitCard" TargetType="Border" BasedOn="{StaticResource Card}">
         <Setter Property="Width" Value="188" />
         <Setter Property="Margin" Value="0,0,10,0" />
+        <Setter Property="Padding" Value="12,10" />
     </Style>
     <Style x:Key="PanelHeader" TargetType="Border">
         <Setter Property="Background" Value="{StaticResource PanelBrush}" />
@@ -104,67 +160,162 @@
     </Style>
     <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource ActionButton}" />
     <Style x:Key="NeutralButton" TargetType="Button">
-        <Setter Property="Background" Value="{StaticResource PanelBorderBrush}" />
-        <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+        <Setter Property="Background" Value="{StaticResource PanelBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource AccentBrush}" />
         <Setter Property="Padding" Value="12,6" />
         <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{StaticResource PanelBorderBrush}" />
         <Setter Property="Cursor" Value="Hand" />
     </Style>
 
-    <!-- Карточка юнита в бою -->
+    <!-- Полоса здоровья (цвет задаётся привязкой; здесь только основа) -->
+    <Style x:Key="HpBar" TargetType="ProgressBar">
+        <Setter Property="Background" Value="#222" />
+        <Setter Property="BorderThickness" Value="0" />
+    </Style>
+
+    <!-- Чекбоксы настроек -->
+    <Style TargetType="CheckBox">
+        <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0,0,0,10" />
+    </Style>
+
+    <!-- Карточка юнита: две линии (информативная, статы внутри) -->
     <DataTemplate x:Key="UnitCardTemplate" DataType="{x:Type vmBattle:UnitCardViewModel}">
         <Border
                 controls:InputBehavior.RightClickCommand="{Binding DataContext.ShowUnitInfoCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                 controls:InputBehavior.LeftClickCommand="{Binding DataContext.ChooseTargetCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
             <Border.Style>
                 <Style TargetType="Border" BasedOn="{StaticResource UnitCard}">
-                    <Setter Property="Background" Value="{Binding Unit.TeamId, Converter={StaticResource TeamToBrush}}" />
+                    <Setter Property="Background" Value="#1A1A1A" />
+                    <Setter Property="BorderBrush" Value="{Binding Unit.TeamId, Converter={StaticResource TeamToBrush}}" />
+                    <Setter Property="BorderThickness" Value="1.5" />
                     <Setter Property="Cursor" Value="Hand" />
+                    <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
+                    <Setter Property="RenderTransform">
+                        <Setter.Value>
+                            <ScaleTransform ScaleX="1"
+                                            ScaleY="1" />
+                        </Setter.Value>
+                    </Setter>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsSelectable}" Value="True">
-                            <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}" />
-                            <Setter Property="BorderThickness" Value="1.5" />
+                        <!-- Пульсация активного юнита (отключается в настройках) -->
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsActive}"
+                                          Value="True" />
+                                <Condition Binding="{Binding DataContext.Settings.PulseEffects, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                          Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.EnterActions>
+                                <BeginStoryboard x:Name="CardPulse">
+                                    <Storyboard RepeatBehavior="Forever"
+                                                AutoReverse="True">
+                                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                                                         To="1.05"
+                                                         Duration="0:0:0.9">
+                                            <DoubleAnimation.EasingFunction>
+                                                <QuadraticEase EasingMode="EaseInOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                                                         To="1.05"
+                                                         Duration="0:0:0.9">
+                                            <DoubleAnimation.EasingFunction>
+                                                <QuadraticEase EasingMode="EaseInOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </MultiDataTrigger.EnterActions>
+                            <MultiDataTrigger.ExitActions>
+                                <StopStoryboard BeginStoryboardName="CardPulse" />
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                                                         To="1.0"
+                                                         Duration="0:0:0.2" />
+                                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                                                         To="1.0"
+                                                         Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </MultiDataTrigger.ExitActions>
+                        </MultiDataTrigger>
+                        <DataTrigger Binding="{Binding IsSelectable}"
+                                     Value="True">
+                            <Setter Property="BorderBrush"
+                                    Value="{StaticResource AccentBrush}" />
+                            <Setter Property="BorderThickness"
+                                    Value="2" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding IsActive}" Value="True">
-                            <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}" />
-                            <Setter Property="BorderThickness" Value="2" />
+                        <DataTrigger Binding="{Binding IsActive}"
+                                     Value="True">
+                            <Setter Property="BorderBrush"
+                                    Value="{StaticResource ActiveBrush}" />
+                            <Setter Property="BorderThickness"
+                                    Value="2" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding IsSelectedTarget}" Value="True">
-                            <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}" />
-                            <Setter Property="BorderThickness" Value="2" />
+                        <DataTrigger Binding="{Binding IsSelectedTarget}"
+                                     Value="True">
+                            <Setter Property="BorderBrush"
+                                    Value="{StaticResource AccentBrush}" />
+                            <Setter Property="BorderThickness"
+                                    Value="2" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding IsDead}" Value="True">
-                            <Setter Property="Opacity" Value="0.55" />
+                        <DataTrigger Binding="{Binding IsDead}"
+                                     Value="True">
+                            <Setter Property="Opacity"
+                                    Value="0.55" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </Border.Style>
             <StackPanel>
                 <DockPanel>
-                    <Border Background="{StaticResource AccentBrush}" CornerRadius="3" Padding="6,2" Margin="0,0,8,6"
+                    <Border Background="{StaticResource AccentBrush}"
+                            CornerRadius="3"
+                            Padding="6,2"
+                            Margin="0,0,8,6"
                             DockPanel.Dock="Right"
                             Visibility="{Binding IsActive, Converter={StaticResource BoolToVisibility}}">
-                        <TextBlock Text="Ход" Foreground="#14141C" FontWeight="Bold"
+                        <TextBlock Text="Ход"
+                                   Foreground="#14141C"
+                                   FontWeight="Bold"
                                    FontSize="{StaticResource FontSizeSmall}" />
                     </Border>
-                    <TextBlock Text="{Binding Unit.DisplayName}" Style="{StaticResource CardTitle}" />
+                    <TextBlock Text="{Binding Unit.DisplayName}"
+                               Style="{StaticResource CardTitle}" />
                 </DockPanel>
-                <TextBlock Text="{Binding Unit.TeamDisplayName}" Style="{StaticResource MutedText}" Margin="0,2,0,6" />
-                <ProgressBar Height="6" Value="{Binding Unit.VitalStat.Current}" Maximum="{Binding Unit.VitalStat.Max}"
-                             Margin="0,0,0,8" />
+                <TextBlock Text="{Binding Unit.TeamDisplayName}"
+                           Style="{StaticResource MutedText}"
+                           Margin="0,2,0,6" />
+                <ProgressBar Height="8"
+                             Value="{Binding Unit.VitalStat.Current}"
+                             Maximum="{Binding Unit.VitalStat.Max}"
+                             Foreground="{Binding HpColorHex, Converter={StaticResource StringToBrush}}"
+                             Style="{StaticResource HpBar}"
+                             Margin="0,0,0,10" />
                 <ItemsControl ItemsSource="{Binding Unit.Stats}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                                <TextBlock Text="{Binding Name}" Style="{StaticResource MutedText}" Width="90" />
-                                <TextBlock Text="{Binding Current}" Style="{StaticResource BodyText}" />
-                                <TextBlock Text="{Binding Max, StringFormat=/{0}}" Style="{StaticResource MutedText}"
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="0,2,0,0">
+                                <TextBlock Text="{Binding Name}"
+                                           Style="{StaticResource MutedText}"
+                                           Width="90" />
+                                <TextBlock Text="{Binding Current}"
+                                           Style="{StaticResource BodyText}" />
+                                <TextBlock Text="{Binding Max, StringFormat=/{0}}"
+                                           Style="{StaticResource MutedText}"
                                            Visibility="{Binding Max, Converter={StaticResource NotNullToVisibility}}" />
                             </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                <ItemsControl ItemsSource="{Binding Unit.StatusIds}" Margin="0,8,0,0">
+                <ItemsControl ItemsSource="{Binding Unit.StatusIds}"
+                              Margin="0,8,0,0">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel />
@@ -172,12 +323,162 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Background="#553C3C50" CornerRadius="3" Padding="6,2" Margin="0,0,4,4">
-                                <TextBlock Text="{Binding}" Style="{StaticResource MutedText}" />
+                            <Border Background="#553C3C50"
+                                    CornerRadius="3"
+                                    Padding="6,2"
+                                    Margin="0,0,4,4">
+                                <TextBlock Text="{Binding}"
+                                           Style="{StaticResource MutedText}" />
                             </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+            </StackPanel>
+        </Border>
+    </DataTemplate>
+
+    <!-- Карточка юнита: одна линия (Blades-стиль, только имя, иконка и ХП) -->
+    <DataTemplate x:Key="UnitCardLineTemplate" DataType="{x:Type vmBattle:UnitCardViewModel}">
+        <Border Margin="10"
+                controls:InputBehavior.RightClickCommand="{Binding DataContext.ShowUnitInfoCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                controls:InputBehavior.LeftClickCommand="{Binding DataContext.ChooseTargetCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Cursor"
+                            Value="Hand" />
+                    <Setter Property="BorderBrush"
+                            Value="Transparent" />
+                    <Setter Property="BorderThickness"
+                            Value="1.5" />
+                    <Setter Property="RenderTransformOrigin"
+                            Value="0.5,0.5" />
+                    <Setter Property="RenderTransform">
+                        <Setter.Value>
+                            <ScaleTransform ScaleX="1"
+                                            ScaleY="1" />
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsActive}"
+                                          Value="True" />
+                                <Condition Binding="{Binding DataContext.Settings.PulseEffects, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                          Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.EnterActions>
+                                <BeginStoryboard x:Name="LinePulse">
+                                    <Storyboard RepeatBehavior="Forever"
+                                                AutoReverse="True">
+                                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                                                         To="1.1"
+                                                         Duration="0:0:1">
+                                            <DoubleAnimation.EasingFunction>
+                                                <QuadraticEase EasingMode="EaseInOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                                                         To="1.1"
+                                                         Duration="0:0:1">
+                                            <DoubleAnimation.EasingFunction>
+                                                <QuadraticEase EasingMode="EaseInOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </MultiDataTrigger.EnterActions>
+                            <MultiDataTrigger.ExitActions>
+                                <StopStoryboard BeginStoryboardName="LinePulse" />
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                                                         To="1.0"
+                                                         Duration="0:0:0.2" />
+                                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                                                         To="1.0"
+                                                         Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </MultiDataTrigger.ExitActions>
+                        </MultiDataTrigger>
+                        <DataTrigger Binding="{Binding IsSelectable}"
+                                     Value="True">
+                            <Setter Property="BorderBrush"
+                                    Value="{StaticResource AccentBrush}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsActive}"
+                                     Value="True">
+                            <Setter Property="BorderBrush"
+                                    Value="{StaticResource ActiveBrush}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsSelectedTarget}"
+                                     Value="True">
+                            <Setter Property="BorderBrush"
+                                    Value="{StaticResource AccentBrush}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsDead}"
+                                     Value="True">
+                            <Setter Property="Opacity"
+                                    Value="0.5" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <StackPanel>
+                <TextBlock Text="{Binding Unit.DisplayName}"
+                           Foreground="White"
+                           FontSize="12"
+                           HorizontalAlignment="Center"
+                           FontWeight="Bold"
+                           Margin="0,0,0,4">
+                    <TextBlock.Effect>
+                        <DropShadowEffect BlurRadius="2"
+                                          ShadowDepth="1"
+                                          Color="Black" />
+                    </TextBlock.Effect>
+                </TextBlock>
+                <Border Width="80"
+                        Height="80"
+                        BorderThickness="2"
+                        CornerRadius="4"
+                        BorderBrush="{Binding Appearance.ColorHex, Converter={StaticResource StringToBrush}}"
+                        Background="#1A1A1A"
+                        Margin="0,0,0,4">
+                    <Grid>
+                        <Rectangle Fill="{Binding Appearance.ColorHex, Converter={StaticResource StringToBrush}}"
+                                   Opacity="0.12" />
+                        <Path Data="{Binding IconKey, Converter={StaticResource IconToGeometry}}"
+                              Fill="{Binding Appearance.ColorHex, Converter={StaticResource StringToBrush}}"
+                              Stretch="Uniform"
+                              Margin="12" />
+                        <Border BorderBrush="{StaticResource ActiveBrush}"
+                                BorderThickness="2"
+                                Visibility="{Binding IsActive, Converter={StaticResource BoolToVisibility}}">
+                            <Border.Effect>
+                                <BlurEffect Radius="8" />
+                            </Border.Effect>
+                        </Border>
+                    </Grid>
+                </Border>
+                <Grid Width="80"
+                      Height="16">
+                    <ProgressBar Value="{Binding Unit.VitalStat.Current}"
+                                 Maximum="{Binding Unit.VitalStat.Max}"
+                                 Foreground="{Binding HpColorHex, Converter={StaticResource StringToBrush}}"
+                                 Style="{StaticResource HpBar}"
+                                 Background="#222" />
+                    <TextBlock Text="{Binding HpLabel}"
+                               FontSize="10"
+                               Foreground="White"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontWeight="Bold">
+                        <TextBlock.Effect>
+                            <DropShadowEffect BlurRadius="1"
+                                              ShadowDepth="1" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+                </Grid>
             </StackPanel>
         </Border>
     </DataTemplate>

@@ -13,12 +13,24 @@
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0" Style="{StaticResource PanelHeader}">
-            <TextBlock Text="Sektor · Пошаговые игры" Style="{StaticResource PageTitle}" />
+            <DockPanel>
+                <Button Content="⚙"
+                        Command="{Binding Settings.ToggleCommand}"
+                        Style="{StaticResource NeutralButton}"
+                        DockPanel.Dock="Right"
+                        FontSize="16"
+                        Padding="12,4"
+                        ToolTip="Настройки" />
+                <TextBlock Text="Sektor · Пошаговые игры"
+                           Style="{StaticResource PageTitle}"
+                           VerticalAlignment="Center" />
+            </DockPanel>
         </Border>
 
         <ContentControl Grid.Row="1" Content="{Binding Navigation.Current}" />
 
         <views:UnitInfoPopup Grid.RowSpan="2" DataContext="{Binding UnitInfo}" />
         <views:ConfirmationPrompt Grid.RowSpan="2" DataContext="{Binding Confirmation}" />
+        <views:SettingsView Grid.RowSpan="2" DataContext="{Binding Settings}" />
     </Grid>
 </Window>

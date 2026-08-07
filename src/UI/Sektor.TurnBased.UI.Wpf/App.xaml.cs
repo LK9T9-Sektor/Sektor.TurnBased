@@ -18,7 +18,8 @@ public partial class App : Application
         var navigation = new NavigationManager();
         var unitInfo = new UnitInfoViewModel();
         var confirmation = new ConfirmationViewModel();
-        var root = new RootViewModel(navigation, unitInfo, confirmation, GameSessionFactory.Create);
+        var settings = new SettingsViewModel();
+        var root = new RootViewModel(navigation, unitInfo, confirmation, settings, GameSessionFactory.Create);
 
         var window = new MainWindow { DataContext = root };
         MainWindow = window;
