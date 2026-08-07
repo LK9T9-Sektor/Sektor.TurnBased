@@ -23,11 +23,11 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
     private readonly BattleSession _session;
     private readonly NavigationManager _navigation;
     private readonly UnitInfoViewModel _unitInfo;
+    private readonly AbilityInfoViewModel _abilityInfo;
     private readonly ConfirmationViewModel _confirmation;
     private readonly SettingsViewModel _settings;
     private readonly IReadOnlyDictionary<string, Func<VisualEvent, string>> _formatters;
-    private readonly ObservableCollection<string> _logLines = new();
-    private int _logCount;
+    private readonly BattleLogViewModel _log = new();
 
     [ObservableProperty]
     private BattleSnapshot? snapshot;
@@ -59,14 +59,11 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
     [ObservableProperty]
     private bool isBusy;
 
-    /// <summary>Лента визуальных событий (последние сверху).</summary>
-    public ObservableCollection<string> EventFeed { get; } = new();
-
-    /// <summary>Полный текстовый журнал игры.</summary>
-    public IReadOnlyList<string> LogLines => _logLines;
-
     /// <summary>Очередь ходов текущего раунда (общий контрол для всех раскладок боя).</summary>
     public ObservableCollection<TurnOrderItemViewModel> TurnQueue { get; } = new();
+
+    /// <summary>Плитки доступных действий текущего игрока (квадраты с глифом и именем).</summary>
+    public ObservableCollection<ActionTileViewModel> ActionTiles { get; } = new();
 
     /// <summary>Общие настройки UX (подтверждение хода, пульсация, виньетка).</summary>
     public SettingsViewModel Settings => _settings;
@@ -74,16 +71,21 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
     /// <summary>true — бой в одну линию (стиль Blades), false — две линии с карточками.</summary>
     public bool IsSingleLineLayout => _session.Kind == GameKinds.BattleLine;
 
+    /// <summary>Лог боя: события и журнал (открывается кнопкой в шапке).</summary>
+    public BattleLogViewModel Log => _log;
+
     public BattleViewModel(
         BattleSession session,
         NavigationManager navigation,
         UnitInfoViewModel unitInfo,
+        AbilityInfoViewModel abilityInfo,
         ConfirmationViewModel confirmation,
         SettingsViewModel settings)
     {
         _session = session;
         _navigation = navigation;
         _unitInfo = unitInfo;
+        _abilityInfo = abilityInfo;
         _confirmation = confirmation;
         _settings = settings;
         _formatters = new Dictionary<string, Func<VisualEvent, string>>
@@ -109,17 +111,26 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
     }
 
     [RelayCommand]
-    private void ChooseAction(ActionOption? option)
+    private void ShowActionInfo(ActionTileViewModel? tile)
     {
-        if (IsBusy || option is null || Snapshot is null)
+        if (tile is not null)
+            _abilityInfo.Show(tile);
+    }
+
+    [RelayCommand]
+    private void ChooseAction(ActionTileViewModel? tile)
+    {
+        if (IsBusy || tile is null || Snapshot is null)
             return;
 
+        var option = tile.Option;
         Hint = null;
 
         if (option.TargetMode == BattleTargetModes.SingleEnemy)
         {
             PendingAction = option;
             IsAwaitingTarget = true;
+            UpdateActionSelection();
             return;
         }
 
@@ -129,6 +140,7 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
 
         PendingAction = null;
         IsAwaitingTarget = false;
+        UpdateActionSelection();
         ConfirmAction(option, targets);
     }
 
@@ -149,6 +161,7 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
         IsAwaitingTarget = false;
         SelectedTargetId = null;
         Hint = null;
+        UpdateActionSelection();
         ConfirmAction(option, new[] { target.Unit.RuntimeId });
     }
 
@@ -238,9 +251,7 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
     {
         foreach (var visual in _session.TakeVisuals())
         {
-            EventFeed.Insert(0, FormatVisual(visual));
-            while (EventFeed.Count > 80)
-                EventFeed.RemoveAt(EventFeed.Count - 1);
+            _log.AddEvent(FormatVisual(visual));
             await Task.Delay(VisualDelay);
         }
     }
@@ -269,9 +280,28 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
         PendingAction = null;
         IsAwaitingTarget = false;
         SelectedTargetId = null;
+        RefreshActionTiles();
         RefreshTurnQueue();
         RefreshLog();
         EndTurnCommand.NotifyCanExecuteChanged();
+    }
+
+    private void RefreshActionTiles()
+    {
+        ActionTiles.Clear();
+        if (Snapshot is not { } snap)
+            return;
+
+        foreach (var option in snap.AvailableActions)
+            ActionTiles.Add(new ActionTileViewModel(option));
+        UpdateActionSelection();
+    }
+
+    private void UpdateActionSelection()
+    {
+        var pendingId = PendingAction?.ActionId;
+        foreach (var tile in ActionTiles)
+            tile.IsSelected = tile.Option.ActionId == pendingId;
     }
 
     private void RefreshTurnQueue()
@@ -299,8 +329,7 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
 
     private void RefreshLog()
     {
-        while (_logCount < _session.Log.Count)
-            _logLines.Add(_session.Log[_logCount++]);
+        _log.SyncLog(_session.Log);
     }
 
     private string BuildStatus()

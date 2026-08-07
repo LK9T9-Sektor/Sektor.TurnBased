@@ -69,7 +69,16 @@ public static class InputBehavior
 
     private static void Execute(ICommand? command, object? parameter)
     {
-        if (command is null || command.CanExecute(parameter) is false)
+        if (command is null)
+            return;
+
+        // Во время пересоздания контейнеров (смена снапшота, анимация) DataContext
+        // может оказаться DependencyProperty.UnsetValue; команды типизированы, поэтому
+        // такой параметр надо свести к null, иначе CanExecute/Execute бросят исключение.
+        if (ReferenceEquals(parameter, DependencyProperty.UnsetValue))
+            parameter = null;
+
+        if (command.CanExecute(parameter) is false)
             return;
         command.Execute(parameter);
     }

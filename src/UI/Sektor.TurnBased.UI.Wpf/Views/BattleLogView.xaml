@@ -1,0 +1,39 @@
+<UserControl x:Class="Sektor.TurnBased.UI.Wpf.Views.BattleLogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="0,10,0,0"
+          Visibility="{Binding IsOpen, Converter={StaticResource BoolToVisibility}}">
+        <Border Style="{StaticResource Panel}">
+            <Grid Margin="12,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <DockPanel Grid.Column="0"
+                           Margin="0,0,8,0">
+                    <DockPanel DockPanel.Dock="Top">
+                        <Button Content="×"
+                                Command="{Binding CloseCommand}"
+                                Style="{StaticResource IconGlyphButton}"
+                                DockPanel.Dock="Right" />
+                        <TextBlock Text="События"
+                                   Style="{StaticResource SectionTitle}"
+                                   VerticalAlignment="Center" />
+                    </DockPanel>
+                    <ListBox ItemsSource="{Binding EventFeed}"
+                             Style="{StaticResource LogList}"
+                             Margin="0,8,0,0" />
+                </DockPanel>
+                <DockPanel Grid.Column="1"
+                           Margin="8,0,0,0">
+                    <TextBlock Text="Лог"
+                               Style="{StaticResource SectionTitle}"
+                               DockPanel.Dock="Top" />
+                    <ListBox ItemsSource="{Binding LogLines}"
+                             Style="{StaticResource LogList}"
+                             Margin="0,8,0,0" />
+                </DockPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

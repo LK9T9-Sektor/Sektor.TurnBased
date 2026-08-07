@@ -149,6 +149,19 @@ public class BattleSessionTests
         }
     }
 
+    [Fact]
+    public void Snapshot_ExposesActionGlyphAndDescription()
+    {
+        var (_, session) = TestHelpers.CreateBattle(seed: 42);
+        session.Start();
+
+        var snap = session.Snapshot();
+        var attack = snap.AvailableActions.First(a => a.ActionId == "basic_attack");
+
+        Assert.Equal("⚔", attack.Glyph);
+        Assert.False(string.IsNullOrWhiteSpace(attack.Description));
+    }
+
     /// <summary>Прогоняет бой и собирает лог и визуальные события для сравнения.</summary>
     private static (List<string> Log, List<(string Type, string Source, string? Target, int Value)> Visuals) PlayBattle(int seed)
     {

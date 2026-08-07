@@ -10,4 +10,6 @@ public sealed record ActionDefinition(
     string Name,
     string TargetMode,
     IReadOnlyList<string> Preconditions,
-    IReadOnlyList<string> Effects);
+    IReadOnlyList<string> Effects,
+    string Glyph = "",
+    string Description = "");

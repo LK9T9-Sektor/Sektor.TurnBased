@@ -33,7 +33,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Background="#553C3C50" CornerRadius="3" Padding="6,2" Margin="0,0,4,4">
+                            <Border Background="{StaticResource ChipBrush}" CornerRadius="3" Padding="6,2" Margin="0,0,4,4">
                                 <TextBlock Text="{Binding}" Style="{StaticResource MutedText}" />
                             </Border>
                         </DataTemplate>

@@ -22,6 +22,9 @@ public sealed class RootViewModel : ObservableObject
     /// <summary>Общий контрол информации о юните (правый клик).</summary>
     public UnitInfoViewModel UnitInfo { get; }
 
+    /// <summary>Общий контрол подсказки о способности (правый клик / наведение).</summary>
+    public AbilityInfoViewModel AbilityInfo { get; }
+
     /// <summary>Общий контрол подтверждения (конец хода/действие).</summary>
     public ConfirmationViewModel Confirmation { get; }
 
@@ -34,19 +37,21 @@ public sealed class RootViewModel : ObservableObject
     public RootViewModel(
         NavigationManager navigation,
         UnitInfoViewModel unitInfo,
+        AbilityInfoViewModel abilityInfo,
         ConfirmationViewModel confirmation,
         SettingsViewModel settings,
         Func<string, int, Result<GameSession>> sessionFactory)
     {
         Navigation = navigation;
         UnitInfo = unitInfo;
+        AbilityInfo = abilityInfo;
         Confirmation = confirmation;
         Settings = settings;
 
         _viewModels = new Dictionary<string, Func<GameSession, IGameViewModel>>
         {
-            [GameKinds.Battle] = session => new BattleViewModel((BattleSession)session, navigation, unitInfo, confirmation, settings),
-            [GameKinds.BattleLine] = session => new BattleViewModel((BattleSession)session, navigation, unitInfo, confirmation, settings),
+            [GameKinds.Battle] = session => new BattleViewModel((BattleSession)session, navigation, unitInfo, abilityInfo, confirmation, settings),
+            [GameKinds.BattleLine] = session => new BattleViewModel((BattleSession)session, navigation, unitInfo, abilityInfo, confirmation, settings),
             [GameKinds.Dialog] = session => new DialogViewModel((DialogSession)session, navigation),
         };
 

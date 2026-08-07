@@ -18,17 +18,17 @@
                 <Grid x:Name="TurnToken"
                       Margin="2">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="40" />
+                        <RowDefinition Height="{StaticResource TurnTokenRowHeight}" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <Border x:Name="IconBorder"
                             Grid.Row="0"
-                            Width="40"
-                            Height="40"
+                            Width="{StaticResource TurnTokenSize}"
+                            Height="{StaticResource TurnTokenSize}"
                             BorderBrush="{Binding Appearance.ColorHex, Converter={StaticResource StringToBrush}}"
                             BorderThickness="1"
-                            Background="#1A1A1A">
+                            Background="{StaticResource PanelDarkBrush}">
                         <Grid>
                             <Rectangle Fill="{Binding Appearance.ColorHex, Converter={StaticResource StringToBrush}}"
                                        Opacity="0.2" />
@@ -41,7 +41,7 @@
                     </Border>
 
                     <Border Grid.Row="1"
-                            Background="#222"
+                            Background="{StaticResource HpTrackBrush}"
                             BorderBrush="{Binding Appearance.ColorHex, Converter={StaticResource StringToBrush}}"
                             BorderThickness="1,0,1,1">
                         <TextBlock Text="{Binding Speed}"

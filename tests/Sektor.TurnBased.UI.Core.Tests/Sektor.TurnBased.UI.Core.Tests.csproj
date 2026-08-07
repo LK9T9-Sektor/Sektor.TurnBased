@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\UI\Sektor.TurnBased.UI.Core\Sektor.TurnBased.UI.Core.csproj" />
+    <ProjectReference Include="..\..\src\UI\Sektor.TurnBased.UI.ViewModels\Sektor.TurnBased.UI.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

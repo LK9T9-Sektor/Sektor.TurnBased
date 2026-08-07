@@ -8,11 +8,11 @@
              d:DesignWidth="40">
     <Grid Width="40"
           Height="40">
-        <Ellipse Stroke="#D4AF37"
+        <Ellipse Stroke="{StaticResource AccentBrush}"
                  StrokeThickness="2"
-                 Fill="#1A1A1A">
+                 Fill="{StaticResource PanelDarkBrush}">
             <Ellipse.Effect>
-                <DropShadowEffect Color="#D4AF37"
+                <DropShadowEffect Color="{StaticResource AccentColor}"
                                   BlurRadius="10"
                                   ShadowDepth="0"
                                   Opacity="0.5" />

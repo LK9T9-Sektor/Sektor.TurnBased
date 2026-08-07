@@ -12,8 +12,10 @@
     <SolidColorBrush x:Key="BgBrush" Color="#1E242B" />
     <SolidColorBrush x:Key="PanelBrush" Color="#2B1A10" />
     <SolidColorBrush x:Key="PanelBorderBrush" Color="#3D2B1F" />
-    <SolidColorBrush x:Key="AccentBrush" Color="#D4AF37" />
-    <SolidColorBrush x:Key="TitleBrush" Color="#E8A34D" />
+    <Color x:Key="AccentColor">#D4AF37</Color>
+    <Color x:Key="TitleColor">#E8A34D</Color>
+    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}" />
+    <SolidColorBrush x:Key="TitleBrush" Color="{StaticResource TitleColor}" />
     <SolidColorBrush x:Key="PlayerBrush" Color="#4682B4" />
     <SolidColorBrush x:Key="EnemyBrush" Color="#800000" />
     <SolidColorBrush x:Key="TextBrush" Color="#FFFFFF" />
@@ -21,8 +23,12 @@
     <SolidColorBrush x:Key="DangerBrush" Color="#E53935" />
     <SolidColorBrush x:Key="OverlayBrush" Color="#A0181818" />
     <SolidColorBrush x:Key="ActiveBrush" Color="#00FFFF" />
-    <SolidColorBrush x:Key="VsBrush" Color="#8B0000" />
+    <SolidColorBrush x:Key="VsBrush" Color="{StaticResource TitleColor}" />
     <SolidColorBrush x:Key="HpBrush" Color="#4CAF50" />
+    <SolidColorBrush x:Key="PanelDarkBrush" Color="#1A1A1A" />
+    <SolidColorBrush x:Key="ChipBrush" Color="#553C3C50" />
+    <SolidColorBrush x:Key="SelectedTileBrush" Color="#55D4AF37" />
+    <SolidColorBrush x:Key="HpTrackBrush" Color="#222" />
 
     <!-- Фон поля боя (радиальный градиент, как в Blades) -->
     <RadialGradientBrush x:Key="BattlefieldBrush"
@@ -89,13 +95,25 @@
     <sys:Double x:Key="FontSizeBody">14</sys:Double>
     <sys:Double x:Key="FontSizeSmall">12</sys:Double>
     <sys:Double x:Key="FontSizeDialog">18</sys:Double>
+    <sys:Double x:Key="FontSizeVs">60</sys:Double>
+    <sys:Double x:Key="FontSizeGlyph">24</sys:Double>
+    <sys:Double x:Key="FontSizeTileName">12</sys:Double>
+    <sys:Double x:Key="FontSizeLineName">12</sys:Double>
+    <sys:Double x:Key="FontSizeLineHp">10</sys:Double>
+    <sys:Double x:Key="AbilityTileSize">84</sys:Double>
+    <sys:Double x:Key="AbilityGlyphSize">44</sys:Double>
+    <sys:Double x:Key="LogListHeight">120</sys:Double>
+    <sys:Double x:Key="LineIconSize">80</sys:Double>
+    <sys:Double x:Key="LineHpRowHeight">16</sys:Double>
+    <sys:Double x:Key="TurnTokenSize">40</sys:Double>
+    <GridLength x:Key="TurnTokenRowHeight">40</GridLength>
 
     <!-- Стили текста -->
     <Style TargetType="TextBlock">
         <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
     </Style>
     <Style x:Key="PageTitle" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{StaticResource TitleBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
         <Setter Property="FontSize" Value="{StaticResource FontSizePageTitle}" />
         <Setter Property="FontWeight" Value="Bold" />
     </Style>
@@ -107,11 +125,11 @@
         <Setter Property="FontSize" Value="{StaticResource FontSizeBody}" />
     </Style>
     <Style x:Key="MutedText" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{StaticResource MutedTextBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}" />
     </Style>
     <Style x:Key="StatusText" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{StaticResource AccentBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
         <Setter Property="FontSize" Value="{StaticResource FontSizeBody}" />
         <Setter Property="FontWeight" Value="SemiBold" />
     </Style>
@@ -151,7 +169,7 @@
     <!-- Кнопки -->
     <Style x:Key="ActionButton" TargetType="Button">
         <Setter Property="Background" Value="{StaticResource AccentBrush}" />
-        <Setter Property="Foreground" Value="#14141C" />
+        <Setter Property="Foreground" Value="{StaticResource TitleBrush}" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="Padding" Value="14,7" />
         <Setter Property="Margin" Value="0,0,8,0" />
@@ -168,9 +186,51 @@
         <Setter Property="Cursor" Value="Hand" />
     </Style>
 
+    <!-- Общий стиль панелей (верхняя, нижняя, лог) -->
+    <Style x:Key="Panel" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource PanelGradientBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource PanelBorderBrush}" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="CornerRadius" Value="4" />
+    </Style>
+
+    <!-- Кнопка-глиф (☰ в шапке, × в попапах) -->
+    <Style x:Key="IconGlyphButton" TargetType="Button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="{StaticResource TitleBrush}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="Padding" Value="10,4" />
+    </Style>
+
+    <!-- Списки лога (лента событий и журнал) -->
+    <Style x:Key="LogList" TargetType="ListBox">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Height" Value="{StaticResource LogListHeight}" />
+        <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+    </Style>
+
+    <!-- Надпись VS на поле боя -->
+    <Style x:Key="VsTitleText" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource VsBrush}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeVs}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect Color="{StaticResource TitleColor}"
+                                  BlurRadius="30"
+                                  ShadowDepth="0"
+                                  Opacity="0.8" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- Полоса здоровья (цвет задаётся привязкой; здесь только основа) -->
     <Style x:Key="HpBar" TargetType="ProgressBar">
-        <Setter Property="Background" Value="#222" />
+        <Setter Property="Background" Value="{StaticResource HpTrackBrush}" />
         <Setter Property="BorderThickness" Value="0" />
     </Style>
 
@@ -188,7 +248,7 @@
                 controls:InputBehavior.LeftClickCommand="{Binding DataContext.ChooseTargetCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
             <Border.Style>
                 <Style TargetType="Border" BasedOn="{StaticResource UnitCard}">
-                    <Setter Property="Background" Value="#1A1A1A" />
+                    <Setter Property="Background" Value="{StaticResource PanelDarkBrush}" />
                     <Setter Property="BorderBrush" Value="{Binding Unit.TeamId, Converter={StaticResource TeamToBrush}}" />
                     <Setter Property="BorderThickness" Value="1.5" />
                     <Setter Property="Cursor" Value="Hand" />
@@ -281,7 +341,7 @@
                             DockPanel.Dock="Right"
                             Visibility="{Binding IsActive, Converter={StaticResource BoolToVisibility}}">
                         <TextBlock Text="Ход"
-                                   Foreground="#14141C"
+                                   Foreground="{StaticResource TitleBrush}"
                                    FontWeight="Bold"
                                    FontSize="{StaticResource FontSizeSmall}" />
                     </Border>
@@ -323,7 +383,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Background="#553C3C50"
+                            <Border Background="{StaticResource ChipBrush}"
                                     CornerRadius="3"
                                     Padding="6,2"
                                     Margin="0,0,4,4">
@@ -426,8 +486,8 @@
             </Border.Style>
             <StackPanel>
                 <TextBlock Text="{Binding Unit.DisplayName}"
-                           Foreground="White"
-                           FontSize="12"
+                           Foreground="{StaticResource TextBrush}"
+                           FontSize="{StaticResource FontSizeLineName}"
                            HorizontalAlignment="Center"
                            FontWeight="Bold"
                            Margin="0,0,0,4">
@@ -437,12 +497,12 @@
                                           Color="Black" />
                     </TextBlock.Effect>
                 </TextBlock>
-                <Border Width="80"
-                        Height="80"
+                <Border Width="{StaticResource LineIconSize}"
+                        Height="{StaticResource LineIconSize}"
                         BorderThickness="2"
                         CornerRadius="4"
                         BorderBrush="{Binding Appearance.ColorHex, Converter={StaticResource StringToBrush}}"
-                        Background="#1A1A1A"
+                        Background="{StaticResource PanelDarkBrush}"
                         Margin="0,0,0,4">
                     <Grid>
                         <Rectangle Fill="{Binding Appearance.ColorHex, Converter={StaticResource StringToBrush}}"
@@ -460,16 +520,16 @@
                         </Border>
                     </Grid>
                 </Border>
-                <Grid Width="80"
-                      Height="16">
+                <Grid Width="{StaticResource LineIconSize}"
+                      Height="{StaticResource LineHpRowHeight}">
                     <ProgressBar Value="{Binding Unit.VitalStat.Current}"
                                  Maximum="{Binding Unit.VitalStat.Max}"
                                  Foreground="{Binding HpColorHex, Converter={StaticResource StringToBrush}}"
                                  Style="{StaticResource HpBar}"
-                                 Background="#222" />
+                                 Background="{StaticResource HpTrackBrush}" />
                     <TextBlock Text="{Binding HpLabel}"
-                               FontSize="10"
-                               Foreground="White"
+                               FontSize="{StaticResource FontSizeLineHp}"
+                               Foreground="{StaticResource TextBrush}"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                FontWeight="Bold">
@@ -479,6 +539,62 @@
                         </TextBlock.Effect>
                     </TextBlock>
                 </Grid>
+            </StackPanel>
+        </Border>
+    </DataTemplate>
+
+    <!-- Плитка действия: квадрат с глифом и имя под ним внутри (общий для всех боёв).
+         ПКМ — подсказка (попап); наведение пока не реализовано. -->
+    <DataTemplate x:Key="AbilityTileTemplate" DataType="{x:Type vmBattle:ActionTileViewModel}">
+        <Border Width="{StaticResource AbilityTileSize}"
+                Height="{StaticResource AbilityTileSize}"
+                Margin="0,0,8,0"
+                Padding="6,6"
+                Cursor="Hand"
+                CornerRadius="6"
+                controls:InputBehavior.LeftClickCommand="{Binding DataContext.ChooseActionCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                controls:InputBehavior.RightClickCommand="{Binding DataContext.ShowActionInfoCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Background"
+                            Value="{StaticResource ChipBrush}" />
+                    <Setter Property="BorderBrush"
+                            Value="{StaticResource PanelBorderBrush}" />
+                    <Setter Property="BorderThickness"
+                            Value="1.5" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsSelected}"
+                                     Value="True">
+                            <Setter Property="BorderBrush"
+                                    Value="{StaticResource AccentBrush}" />
+                            <Setter Property="Background"
+                                    Value="{StaticResource SelectedTileBrush}" />
+                        </DataTrigger>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter Property="BorderBrush"
+                                    Value="{StaticResource TitleBrush}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <StackPanel>
+                <Border Width="{StaticResource AbilityGlyphSize}"
+                        Height="{StaticResource AbilityGlyphSize}"
+                        Background="{StaticResource PanelBrush}"
+                        CornerRadius="4"
+                        HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding Glyph}"
+                               FontSize="{StaticResource FontSizeGlyph}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+                </Border>
+                <TextBlock Text="{Binding Name}"
+                           FontSize="{StaticResource FontSizeTileName}"
+                           TextAlignment="Center"
+                           TextWrapping="Wrap"
+                           MaxHeight="32"
+                           Margin="0,4,0,0" />
             </StackPanel>
         </Border>
     </DataTemplate>

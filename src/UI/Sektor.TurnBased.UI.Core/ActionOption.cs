@@ -7,4 +7,6 @@ namespace Sektor.TurnBased.UI.Core;
 public sealed record ActionOption(
     string ActionId,
     string Name,
-    string TargetMode);
+    string TargetMode,
+    string Glyph = "",
+    string Description = "");

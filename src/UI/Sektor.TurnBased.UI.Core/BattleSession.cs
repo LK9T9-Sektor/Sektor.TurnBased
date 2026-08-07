@@ -90,7 +90,7 @@ public sealed class BattleSession : GameSession
         foreach (var actionId in template.ActionIds)
         {
             if (Context.Content.TryGet<ActionDefinition>(actionId, out var action) && action is not null)
-                options.Add(new ActionOption(action.Id, action.Name, action.TargetMode));
+                options.Add(new ActionOption(action.Id, action.Name, action.TargetMode, action.Glyph, action.Description));
         }
 
         return options;
