@@ -90,6 +90,35 @@ public class BattleSessionTests
     }
 
     [Fact]
+    public void SubmitSkipTurn_AdvancesTurnAndEmitsVisual()
+    {
+        var (_, session) = TestHelpers.CreateBattle(seed: 42);
+        session.Start();
+
+        var snap = session.Snapshot();
+        var submit = session.Submit(new SkipTurnCommand(snap.CurrentActorId!));
+
+        Assert.True(submit.IsSuccess, submit.Error);
+        Assert.Contains(session.TakeVisuals(), v => v.EventType == "TurnSkipped");
+        Assert.Contains(session.Log, e => e == "SkipTurn: hero_warrior_0");
+        Assert.False(session.IsFailed);
+    }
+
+    [Fact]
+    public void SubmitSkipTurn_ForWrongActor_FailsSession()
+    {
+        var (_, session) = TestHelpers.CreateBattle(seed: 42);
+        session.Start();
+
+        var snap = session.Snapshot();
+        var enemy = snap.Actors.First(a => a.TeamId != "player");
+        var submit = session.Submit(new SkipTurnCommand(enemy.RuntimeId));
+
+        Assert.True(submit.IsFailure);
+        Assert.True(session.IsFailed);
+    }
+
+    [Fact]
     public void SameSeed_ProducesIdenticalLogAndVisuals()
     {
         var run1 = PlayBattle(seed: 42);

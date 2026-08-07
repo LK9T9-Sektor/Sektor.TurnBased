@@ -12,7 +12,7 @@ using Sektor.TurnBased.UI.ViewModels.Shared;
 namespace Sektor.TurnBased.UI.ViewModels.Battle;
 
 /// <summary>
-/// VM боя: обновляет снапшот, список юнитов и статус, проигрывает визуальные
+/// VM боя: обновляет снапшот, карточки юнитов и статус, проигрывает визуальные
 /// события поочерёдно и управляет выбором действия и цели с подтверждением.
 /// Общение только через INPC и команды, без событий и messenger.
 /// </summary>
@@ -32,16 +32,22 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
     private BattleSnapshot? snapshot;
 
     [ObservableProperty]
-    private IReadOnlyList<UnitSnapshot> playerUnits = Array.Empty<UnitSnapshot>();
+    private IReadOnlyList<UnitCardViewModel> playerUnits = Array.Empty<UnitCardViewModel>();
 
     [ObservableProperty]
-    private IReadOnlyList<UnitSnapshot> enemyUnits = Array.Empty<UnitSnapshot>();
+    private IReadOnlyList<UnitCardViewModel> enemyUnits = Array.Empty<UnitCardViewModel>();
 
     [ObservableProperty]
     private string status = "Бой начинается...";
 
     [ObservableProperty]
     private string? error;
+
+    [ObservableProperty]
+    private string? hint;
+
+    [ObservableProperty]
+    private string? selectedTargetId;
 
     [ObservableProperty]
     private ActionOption? pendingAction;
@@ -75,6 +81,7 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
             ["Died"] = v => $"{ActorName(v.TargetRuntimeId ?? string.Empty)} погиб",
             ["Summon"] = v => $"{ActorName(v.SourceRuntimeId)} призван",
             ["TurnBlocked"] = v => $"{ActorName(v.SourceRuntimeId)} пропускает ход",
+            ["TurnSkipped"] = v => $"{ActorName(v.SourceRuntimeId)} пропускает ход",
             ["StatusApply"] = v => $"{ActorName(v.TargetRuntimeId ?? string.Empty)}: статус {v.Payload}",
         };
     }
@@ -83,10 +90,10 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
     public Task RunAsync() => StepAsync(_session.Start);
 
     [RelayCommand]
-    private void ShowUnitInfo(UnitSnapshot? unit)
+    private void ShowUnitInfo(UnitCardViewModel? card)
     {
-        if (unit is not null)
-            _unitInfo.Show(unit);
+        if (card is not null)
+            _unitInfo.Show(card.Unit);
     }
 
     [RelayCommand]
@@ -94,6 +101,8 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
     {
         if (IsBusy || option is null || Snapshot is null)
             return;
+
+        Hint = null;
 
         if (option.TargetMode == BattleTargetModes.SingleEnemy)
         {
@@ -112,22 +121,49 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
     }
 
     [RelayCommand(CanExecute = nameof(CanChooseTarget))]
-    private void ChooseTarget(UnitSnapshot? target)
+    private void ChooseTarget(UnitCardViewModel? target)
     {
-        if (target is null || PendingAction is null)
+        if (target is null)
             return;
+
+        if (PendingAction is null)
+        {
+            Hint = IsPlayerTurn ? "Сначала выберите действие." : "Сейчас ход противника.";
+            return;
+        }
 
         var option = PendingAction;
         PendingAction = null;
         IsAwaitingTarget = false;
-        ConfirmAction(option, new[] { target.RuntimeId });
+        SelectedTargetId = null;
+        Hint = null;
+        ConfirmAction(option, new[] { target.Unit.RuntimeId });
+    }
+
+    [RelayCommand(CanExecute = nameof(CanEndTurn))]
+    private void EndTurn()
+    {
+        if (Snapshot?.CurrentActorId is not { } actorId)
+            return;
+
+        var command = new SkipTurnCommand(actorId);
+        _confirmation.Request("Завершить ход?", () => StepAsync(() => _session.Submit(command)));
     }
 
     [RelayCommand]
     private void GoToLobby() => _navigation.NavigateTo(Pages.Lobby);
 
-    private bool CanChooseTarget(UnitSnapshot? target) =>
-        IsAwaitingTarget && target is not null && target.IsAlive && target.TeamId != PlayerTeamId;
+    private bool CanChooseTarget(UnitCardViewModel? target) =>
+        target is not null && target.Unit.IsAlive && target.Unit.TeamId != PlayerTeamId;
+
+    private bool CanEndTurn() =>
+        Snapshot is not null
+        && !IsBusy
+        && !IsAwaitingTarget
+        && IsPlayerTurn;
+
+    private bool IsPlayerTurn =>
+        Snapshot?.Actors.FirstOrDefault(a => a.RuntimeId == Snapshot.CurrentActorId)?.ControlledBy == "player";
 
     private string PlayerTeamId =>
         Snapshot?.Actors.FirstOrDefault(a => a.ControlledBy == "player")?.TeamId ?? "player";
@@ -204,12 +240,29 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
     private void RefreshSnapshot()
     {
         Snapshot = (BattleSnapshot)_session.Snapshot();
-        PlayerUnits = Snapshot.Actors.Where(a => a.TeamId == PlayerTeamId).ToList();
-        EnemyUnits = Snapshot.Actors.Where(a => a.TeamId != PlayerTeamId).ToList();
+        var activeId = Snapshot.CurrentActorId;
+        var playerTeamId = PlayerTeamId;
+        PlayerUnits = Snapshot.Actors
+            .Where(a => a.TeamId == playerTeamId)
+            .Select(a => CreateCard(a, activeId))
+            .ToList();
+        EnemyUnits = Snapshot.Actors
+            .Where(a => a.TeamId != playerTeamId)
+            .Select(a => CreateCard(a, activeId))
+            .ToList();
         Status = BuildStatus();
         PendingAction = null;
         IsAwaitingTarget = false;
+        SelectedTargetId = null;
         RefreshLog();
+        EndTurnCommand.NotifyCanExecuteChanged();
+    }
+
+    private UnitCardViewModel CreateCard(UnitSnapshot unit, string? activeId)
+    {
+        var isSelected = IsAwaitingTarget && unit.RuntimeId == SelectedTargetId;
+        var isSelectable = IsAwaitingTarget && unit.IsAlive && unit.TeamId != PlayerTeamId;
+        return new UnitCardViewModel(unit, isActive: unit.RuntimeId == activeId, isSelected, isSelectable);
     }
 
     private void RefreshLog()

@@ -97,9 +97,16 @@ public sealed class ActorTurnPhase : IGamePhase
 
     public Result<PhaseTransition?> OnCommand(GameContext context, IGameCommand command)
     {
-        if (command is not UseActionCommand useAction)
-            return Result<PhaseTransition?>.Success(null);
+        if (command is UseActionCommand useAction)
+            return OnPlayerAction(context, useAction.ActorRuntimeId, useAction);
+        if (command is SkipTurnCommand skipTurn)
+            return OnPlayerAction(context, skipTurn.ActorRuntimeId, null);
 
+        return Result<PhaseTransition?>.Success(null);
+    }
+
+    private Result<PhaseTransition?> OnPlayerAction(GameContext context, string actorRuntimeId, UseActionCommand? action)
+    {
         if (_state.WinnerTeamId is not null)
             return Result<PhaseTransition?>.Success(PhaseTransition.Next(BattlePhaseIds.End));
 
@@ -107,13 +114,26 @@ public sealed class ActorTurnPhase : IGamePhase
         if (currentId is null)
             return Result<PhaseTransition?>.Failure($"No actor is taking a turn.");
 
-        if (useAction.ActorRuntimeId != currentId)
+        if (actorRuntimeId != currentId)
             return Result<PhaseTransition?>.Failure(
-                $"Command is not for the current actor. Expected '{currentId}', got '{useAction.ActorRuntimeId}'.");
+                $"Command is not for the current actor. Expected '{currentId}', got '{actorRuntimeId}'.");
 
-        var executed = _executor.Execute(useAction);
-        if (executed.IsFailure)
-            return Result<PhaseTransition?>.Failure(executed.Error!);
+        if (action is not null)
+        {
+            var executed = _executor.Execute(action);
+            if (executed.IsFailure)
+                return Result<PhaseTransition?>.Failure(executed.Error!);
+        }
+        else
+        {
+            context.Visuals.Enqueue(new VisualEvent
+            {
+                EventType = "TurnSkipped",
+                SourceRuntimeId = currentId,
+                TargetRuntimeId = currentId,
+            });
+            context.Log.Append($"SkipTurn: {currentId}");
+        }
 
         _state.TurnIndex++;
 

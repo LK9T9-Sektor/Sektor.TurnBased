@@ -19,34 +19,51 @@
         <StackPanel Grid.Row="1" Margin="0,0,0,10">
             <TextBlock Text="Ваши герои" Style="{StaticResource SectionTitle}" />
             <ItemsControl ItemsSource="{Binding PlayerUnits}" ItemTemplate="{StaticResource UnitCardTemplate}"
-                          Margin="0,8,0,0" />
-        </StackPanel>
-
-        <StackPanel Grid.Row="2" Margin="0,0,0,10">
-            <TextBlock Text="Враги" Style="{StaticResource SectionTitle}" />
-            <ItemsControl ItemsSource="{Binding EnemyUnits}" ItemTemplate="{StaticResource UnitCardTemplate}"
-                          Margin="0,8,0,0" />
-        </StackPanel>
-
-        <StackPanel Grid.Row="3" Margin="0,0,0,10">
-            <TextBlock Text="Действия" Style="{StaticResource SectionTitle}" />
-            <ItemsControl ItemsSource="{Binding Snapshot.AvailableActions}" Margin="0,8,0,0">
+                          Margin="0,8,0,0">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Button Content="{Binding Name}"
-                                Command="{Binding DataContext.ChooseActionCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                CommandParameter="{Binding}"
-                                Style="{StaticResource ActionButton}" />
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
             </ItemsControl>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Margin="0,0,0,10">
+            <TextBlock Text="Враги" Style="{StaticResource SectionTitle}" />
+            <ItemsControl ItemsSource="{Binding EnemyUnits}" ItemTemplate="{StaticResource UnitCardTemplate}"
+                          Margin="0,8,0,0">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Margin="0,0,0,10">
+            <TextBlock Text="Действия" Style="{StaticResource SectionTitle}" />
+            <DockPanel Margin="0,8,0,0">
+                <Button Content="Завершить ход" Command="{Binding EndTurnCommand}"
+                        Style="{StaticResource PrimaryButton}" DockPanel.Dock="Right" />
+                <ItemsControl ItemsSource="{Binding Snapshot.AvailableActions}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Content="{Binding Name}"
+                                    Command="{Binding DataContext.ChooseActionCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                    CommandParameter="{Binding}"
+                                    Style="{StaticResource ActionButton}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </DockPanel>
             <TextBlock Text="Выберите врага для цели..." Style="{StaticResource MutedText}" Margin="0,8,0,0"
                        Visibility="{Binding IsAwaitingTarget, Converter={StaticResource BoolToVisibility}}" />
+            <TextBlock Text="{Binding Hint}" Style="{StaticResource MutedText}" Margin="0,8,0,0" />
             <TextBlock Text="{Binding Error}" Style="{StaticResource ErrorText}" Margin="0,8,0,0" />
         </StackPanel>
 
