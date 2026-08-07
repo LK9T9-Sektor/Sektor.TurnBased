@@ -1,0 +1,43 @@
+<UserControl x:Class="Sektor.TurnBased.UI.Wpf.Views.DialogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Background="{StaticResource BgBrush}" Margin="32">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" Margin="0,0,0,12">
+            <Button Content="В лобби" Command="{Binding GoToLobbyCommand}" Style="{StaticResource NeutralButton}"
+                    DockPanel.Dock="Right" />
+            <TextBlock Text="{Binding Status}" Style="{StaticResource StatusText}" VerticalAlignment="Center" />
+        </DockPanel>
+
+        <Border Grid.Row="1" Style="{StaticResource Card}" VerticalAlignment="Top" Margin="0,0,0,16">
+            <TextBlock Text="{Binding Snapshot.NodeText}" Style="{StaticResource DialogText}" />
+        </Border>
+
+        <ItemsControl Grid.Row="2" ItemsSource="{Binding Snapshot.Choices}" Margin="0,0,0,16">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Content="{Binding Text}"
+                            Command="{Binding DataContext.ChooseCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                            CommandParameter="{Binding}"
+                            Style="{StaticResource ActionButton}"
+                            HorizontalAlignment="Left" Margin="0,0,0,8" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <TextBlock Grid.Row="3" Text="{Binding Error}" Style="{StaticResource ErrorText}" Margin="0,0,0,8" />
+
+        <DockPanel Grid.Row="4">
+            <TextBlock Text="События" Style="{StaticResource SectionTitle}" DockPanel.Dock="Top" />
+            <ListBox ItemsSource="{Binding EventFeed}" Background="Transparent" BorderThickness="0"
+                     Margin="0,8,0,0" />
+        </DockPanel>
+    </Grid>
+</UserControl>

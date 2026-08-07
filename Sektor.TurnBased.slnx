@@ -9,9 +9,15 @@
   <Folder Name="/Dialog/">
     <Project Path="src/Dialog/Sektor.TurnBased.Dialog/Sektor.TurnBased.Dialog.csproj" />
   </Folder>
+  <Folder Name="/UI/">
+    <Project Path="src/UI/Sektor.TurnBased.UI.Core/Sektor.TurnBased.UI.Core.csproj" />
+    <Project Path="src/UI/Sektor.TurnBased.UI.ViewModels/Sektor.TurnBased.UI.ViewModels.csproj" />
+    <Project Path="src/UI/Sektor.TurnBased.UI.Wpf/Sektor.TurnBased.UI.Wpf.csproj" />
+  </Folder>
   <Folder Name="/Tests/">
     <Project Path="tests/Sektor.TurnBased.Core.Tests/Sektor.TurnBased.Core.Tests.csproj" />
     <Project Path="tests/Sektor.TurnBased.Battle.Tests/Sektor.TurnBased.Battle.Tests.csproj" />
     <Project Path="tests/Sektor.TurnBased.Dialog.Tests/Sektor.TurnBased.Dialog.Tests.csproj" />
+    <Project Path="tests/Sektor.TurnBased.UI.Core.Tests/Sektor.TurnBased.UI.Core.Tests.csproj" />
   </Folder>
 </Solution>

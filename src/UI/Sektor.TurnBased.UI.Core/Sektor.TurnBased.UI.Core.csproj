@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Sektor.TurnBased.UI.Core</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Sektor.TurnBased.Core\Sektor.TurnBased.Core.csproj" />
+    <ProjectReference Include="..\..\Battle\Sektor.TurnBased.Battle\Sektor.TurnBased.Battle.csproj" />
+    <ProjectReference Include="..\..\Dialog\Sektor.TurnBased.Dialog\Sektor.TurnBased.Dialog.csproj" />
+  </ItemGroup>
+
+</Project>
