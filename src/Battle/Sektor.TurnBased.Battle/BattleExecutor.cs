@@ -16,6 +16,8 @@ public sealed class BattleExecutor
     private readonly GameContext _context;
     private readonly BattleState _state;
     private readonly BattleEventSink _sink;
+    private readonly double _critChance;
+    private readonly double _critMultiplier;
     private readonly int _maxChainDepth;
     private int _executionDepth;
 
@@ -23,11 +25,15 @@ public sealed class BattleExecutor
         GameContext context,
         BattleState state,
         BattleEventSink sink,
+        double critChance = 0,
+        double critMultiplier = 1.5,
         int maxChainDepth = 16)
     {
         _context = context;
         _state = state;
         _sink = sink;
+        _critChance = critChance;
+        _critMultiplier = critMultiplier;
         _maxChainDepth = maxChainDepth;
     }
 
@@ -73,7 +79,9 @@ public sealed class BattleExecutor
             _context.Rng,
             _context.Content,
             _state,
-            _sink);
+            _sink,
+            _critChance,
+            _critMultiplier);
 
         foreach (var preconditionId in action.Preconditions)
         {

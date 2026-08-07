@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using Sektor.TurnBased.UI.Core;
 
 namespace Sektor.TurnBased.UI.ViewModels.Battle;
@@ -22,6 +23,9 @@ public sealed class UnitCardViewModel
     /// <summary>Внешний вид юнита (иконка и цвет) из ростера.</summary>
     public UnitAppearance Appearance { get; }
 
+    /// <summary>Всплывающие тексты над карточкой (урон/лечение), общая коллекция на актора.</summary>
+    public ObservableCollection<FloatingTextViewModel> FloatingTexts { get; }
+
     /// <summary>Ключ иконки: надгробие для погибшего, иначе — иконка юнита.</summary>
     public string IconKey => IsDead ? "IconTombstone" : Appearance.IconKey;
 
@@ -44,12 +48,18 @@ public sealed class UnitCardViewModel
         }
     }
 
-    public UnitCardViewModel(UnitSnapshot unit, bool isActive, bool isSelectedTarget, bool isSelectable)
+    public UnitCardViewModel(
+        UnitSnapshot unit,
+        bool isActive,
+        bool isSelectedTarget,
+        bool isSelectable,
+        ObservableCollection<FloatingTextViewModel>? floatingTexts = null)
     {
         Unit = unit;
         IsActive = isActive;
         IsSelectedTarget = isSelectedTarget;
         IsSelectable = isSelectable;
         Appearance = UnitAppearances.ForTemplate(unit.TemplateId, unit.TeamId);
+        FloatingTexts = floatingTexts ?? new ObservableCollection<FloatingTextViewModel>();
     }
 }

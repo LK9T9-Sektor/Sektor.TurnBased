@@ -17,6 +17,15 @@ public sealed class VisualEvent
 
     public int Value { get; set; }
 
+    /// <summary>Изменение значения (дельта) для статных событий, иначе 0.</summary>
+    public int Delta { get; set; }
+
+    /// <summary>true — событие является критическим попаданием (урон ×крит-множитель).</summary>
+    public bool IsCritical { get; set; }
+
+    /// <summary>Id стата для статных событий (изменённая характеристика), иначе null.</summary>
+    public string? StatId { get; set; }
+
     /// <summary>Дополнительные данные для рендерера (координаты, цвета, тексты).</summary>
     public object? Payload { get; set; }
 }

@@ -64,7 +64,7 @@ public static class GameSessionFactory
             context,
             content,
             battleContent.Value!,
-            new BattleConfig("initiative", "extermination"),
+            new BattleConfig("initiative", "extermination", CritChance: 0.15, CritMultiplier: 1.5),
             DefaultDisplayNames,
             kind);
         return session.TryGetValue(out var value)

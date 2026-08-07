@@ -9,7 +9,7 @@ namespace Sektor.TurnBased.Battle.Events;
 /// </summary>
 public interface ICombatEvents
 {
-    void StatChanged(string actorId, StatChange change, string? sourceActorId);
+    void StatChanged(string actorId, StatChange change, string? sourceActorId, bool isCritical = false);
 
     void ActorDied(string actorId, string? sourceActorId);
 

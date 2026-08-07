@@ -20,6 +20,15 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
 {
     private static readonly TimeSpan VisualDelay = TimeSpan.FromMilliseconds(140);
 
+    /// <summary>Длительность анимации всплывающего текста.</summary>
+    private static readonly TimeSpan FloatingDuration = TimeSpan.FromMilliseconds(1050);
+
+    /// <summary>Высота подъёма всплывающего текста в пикселях.</summary>
+    private const double FloatingRisePx = 36;
+
+    /// <summary>Частота обновления анимации всплывающего текста.</summary>
+    private const int FloatingFps = 30;
+
     private readonly BattleSession _session;
     private readonly NavigationManager _navigation;
     private readonly UnitInfoViewModel _unitInfo;
@@ -28,6 +37,12 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
     private readonly SettingsViewModel _settings;
     private readonly IReadOnlyDictionary<string, Func<VisualEvent, string>> _formatters;
     private readonly BattleLogViewModel _log = new();
+
+    /// <summary>Всплывающие тексты по акторам: коллекция переживает пересоздание карточек.</summary>
+    private readonly Dictionary<string, ObservableCollection<FloatingTextViewModel>> _floatingTexts = new();
+
+    /// <summary>Id жизненного стата (для фильтра: всплывает только урон/лечение по здоровью).</summary>
+    private string? _deathStatId;
 
     [ObservableProperty]
     private BattleSnapshot? snapshot;
@@ -252,8 +267,61 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
         foreach (var visual in _session.TakeVisuals())
         {
             _log.AddEvent(FormatVisual(visual));
+            AddFloatingText(visual);
             await Task.Delay(VisualDelay);
         }
+    }
+
+    /// <summary>Добавляет всплывающий текст для изменения здоровья цели (урон/лечение).</summary>
+    private void AddFloatingText(VisualEvent visual)
+    {
+        if (visual.EventType != "StatChanged"
+            || visual.TargetRuntimeId is null
+            || visual.Delta == 0)
+            return;
+
+        _deathStatId ??= Snapshot?.Actors.FirstOrDefault()?.VitalStat?.StatId;
+        if (_deathStatId is not null && visual.StatId != _deathStatId)
+            return;
+
+        var floater = new FloatingTextViewModel(
+            visual.TargetRuntimeId,
+            Math.Abs(visual.Delta).ToString(),
+            isHeal: visual.Delta > 0,
+            isCrit: visual.IsCritical);
+        var collection = FloatingTextsFor(visual.TargetRuntimeId);
+        collection.Add(floater);
+        _ = AnimateAndRemoveAsync(floater, collection);
+    }
+
+    /// <summary>Плавно поднимает и растворяет всплывающий текст, затем удаляет его.</summary>
+    private static async Task AnimateAndRemoveAsync(
+        FloatingTextViewModel floater,
+        ObservableCollection<FloatingTextViewModel> collection)
+    {
+        var frames = (int)(FloatingDuration.TotalMilliseconds / 1000.0 * FloatingFps);
+        var delay = TimeSpan.FromMilliseconds(1000.0 / FloatingFps);
+        for (var i = 1; i <= frames; i++)
+        {
+            var t = i / (double)frames;
+            floater.Opacity = 1.0 - t * t;
+            floater.OffsetY = -FloatingRisePx * t;
+            await Task.Delay(delay);
+        }
+
+        floater.Opacity = 0;
+        collection.Remove(floater);
+    }
+
+    /// <summary>Общая коллекция всплывающих текстов для актора (создаётся при первом обращении).</summary>
+    public ObservableCollection<FloatingTextViewModel> FloatingTextsFor(string runtimeId)
+    {
+        if (!_floatingTexts.TryGetValue(runtimeId, out var collection))
+        {
+            collection = new ObservableCollection<FloatingTextViewModel>();
+            _floatingTexts.Add(runtimeId, collection);
+        }
+        return collection;
     }
 
     private string FormatVisual(VisualEvent visual) =>
@@ -324,7 +392,12 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
     {
         var isSelected = IsAwaitingTarget && unit.RuntimeId == SelectedTargetId;
         var isSelectable = IsAwaitingTarget && unit.IsAlive && unit.TeamId != PlayerTeamId;
-        return new UnitCardViewModel(unit, isActive: unit.RuntimeId == activeId, isSelected, isSelectable);
+        return new UnitCardViewModel(
+            unit,
+            isActive: unit.RuntimeId == activeId,
+            isSelected,
+            isSelectable,
+            FloatingTextsFor(unit.RuntimeId));
     }
 
     private void RefreshLog()

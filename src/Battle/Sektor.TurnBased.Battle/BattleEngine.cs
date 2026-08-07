@@ -62,7 +62,7 @@ public sealed class BattleEngine
         var statDefinitions = battleContent.Stats.ToDictionary(s => s.Id);
         var state = new BattleState(statDefinitions);
         var sink = new BattleEventSink(context, state);
-        var executor = new BattleExecutor(context, state, sink);
+        var executor = new BattleExecutor(context, state, sink, config.CritChance, config.CritMultiplier);
         var ai = new BattleAi(context, state);
 
         var pipeline = new GamePipeline(context);

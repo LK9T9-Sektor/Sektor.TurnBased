@@ -17,13 +17,21 @@ public sealed class ActionContext
     public BattleState State { get; }
     public ICombatEvents? Sink { get; }
 
+    /// <summary>Шанс критического попадания (0 — критов нет).</summary>
+    public double CritChance { get; }
+
+    /// <summary>Множитель урона критического попадания.</summary>
+    public double CritMultiplier { get; }
+
     public ActionContext(
         string sourceActorId,
         IReadOnlyList<string> targetActorIds,
         DeterministicRng rng,
         ContentRegistry content,
         BattleState state,
-        ICombatEvents? sink = null)
+        ICombatEvents? sink = null,
+        double critChance = 0,
+        double critMultiplier = 1.5)
     {
         SourceActorId = sourceActorId;
         TargetActorIds = targetActorIds;
@@ -31,6 +39,8 @@ public sealed class ActionContext
         Content = content;
         State = state;
         Sink = sink;
+        CritChance = critChance;
+        CritMultiplier = critMultiplier;
     }
 
     public BattleActor? GetActor(string actorId) => State.GetActor(actorId);

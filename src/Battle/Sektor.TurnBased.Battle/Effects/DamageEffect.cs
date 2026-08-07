@@ -37,18 +37,32 @@ public sealed class DamageEffect : ICombatEffect
             if (damage <= 0)
                 continue;
 
+            var isCritical = false;
+            if (context.CritChance > 0 && context.Rng.NextDouble() < context.CritChance)
+            {
+                damage = (int)Math.Round(damage * context.CritMultiplier);
+                isCritical = true;
+            }
+
             var target = context.GetActor(targetId);
             if (target is null)
                 continue;
 
             var change = target.Resources.ModifyStat(TargetStatId, -damage);
             if (change is not null)
-                context.Sink?.StatChanged(targetId, change, context.SourceActorId);
+                context.Sink?.StatChanged(targetId, change, context.SourceActorId, isCritical);
         }
         return Result.Success();
     }
 
-    public int EstimateDamage(ActionContext context, string targetActorId) => ComputeDamage(context, targetActorId);
+    public int EstimateDamage(ActionContext context, string targetActorId)
+    {
+        var baseDamage = ComputeDamage(context, targetActorId);
+        if (context.CritChance <= 0)
+            return baseDamage;
+
+        return baseDamage + (int)Math.Round(baseDamage * context.CritChance * (context.CritMultiplier - 1));
+    }
 
     private int ComputeDamage(ActionContext context, string targetActorId)
     {

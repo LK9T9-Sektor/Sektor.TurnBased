@@ -20,10 +20,10 @@ public sealed class BattleEventSink : ICombatEvents
         _state = state;
     }
 
-    public void StatChanged(string actorId, StatChange change, string? sourceActorId)
+    public void StatChanged(string actorId, StatChange change, string? sourceActorId, bool isCritical = false)
     {
         _context.Events.Raise(
-            new ActorStatChanged(actorId, change.StatId, change.Delta, change.NewValue),
+            new ActorStatChanged(actorId, change.StatId, change.Delta, change.NewValue, isCritical),
             applyBase: e =>
             {
                 _context.Visuals.Enqueue(new VisualEvent
@@ -32,6 +32,9 @@ public sealed class BattleEventSink : ICombatEvents
                     SourceRuntimeId = actorId,
                     TargetRuntimeId = actorId,
                     Value = change.NewValue,
+                    Delta = change.Delta,
+                    IsCritical = e.IsCritical,
+                    StatId = change.StatId,
                 });
                 var sign = change.Delta >= 0 ? "+" : "";
                 _context.Log.Append($"{actorId} {change.StatId} {sign}{change.Delta} -> {change.NewValue}");

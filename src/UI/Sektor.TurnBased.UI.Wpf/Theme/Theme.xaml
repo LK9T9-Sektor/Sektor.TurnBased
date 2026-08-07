@@ -100,8 +100,10 @@
     <sys:Double x:Key="FontSizeTileName">12</sys:Double>
     <sys:Double x:Key="FontSizeLineName">12</sys:Double>
     <sys:Double x:Key="FontSizeLineHp">10</sys:Double>
-    <sys:Double x:Key="AbilityTileSize">84</sys:Double>
-    <sys:Double x:Key="AbilityGlyphSize">44</sys:Double>
+    <sys:Double x:Key="FontSizeFloat">16</sys:Double>
+    <sys:Double x:Key="FontSizeFloatCrit">22</sys:Double>
+    <sys:Double x:Key="AbilityTileSize">72</sys:Double>
+    <sys:Double x:Key="AbilityGlyphSize">38</sys:Double>
     <sys:Double x:Key="LogListHeight">120</sys:Double>
     <sys:Double x:Key="LineIconSize">80</sys:Double>
     <sys:Double x:Key="LineHpRowHeight">16</sys:Double>
@@ -168,6 +170,48 @@
 
     <!-- Кнопки -->
     <Style x:Key="ActionButton" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="ButtonBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{StaticResource AccentBrush}"
+                            BorderThickness="1"
+                            CornerRadius="4">
+                        <ContentPresenter Margin="{TemplateBinding Padding}"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled"
+                                 Value="False">
+                            <Setter TargetName="ButtonBorder"
+                                    Property="Background"
+                                    Value="{StaticResource PanelBrush}" />
+                            <Setter TargetName="ButtonBorder"
+                                    Property="BorderBrush"
+                                    Value="{StaticResource PanelBorderBrush}" />
+                            <Setter Property="Foreground"
+                                    Value="{StaticResource MutedTextBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter TargetName="ButtonBorder"
+                                    Property="Background"
+                                    Value="{StaticResource TitleBrush}" />
+                            <Setter Property="Foreground"
+                                    Value="#1E242B" />
+                        </Trigger>
+                        <Trigger Property="IsPressed"
+                                 Value="True">
+                            <Setter TargetName="ButtonBorder"
+                                    Property="Opacity"
+                                    Value="0.75" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
         <Setter Property="Background" Value="{StaticResource AccentBrush}" />
         <Setter Property="Foreground" Value="{StaticResource TitleBrush}" />
         <Setter Property="FontWeight" Value="SemiBold" />
@@ -240,6 +284,51 @@
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Margin" Value="0,0,0,10" />
     </Style>
+
+    <!-- Всплывающий текст урона/лечения над карточкой: подъём и растворение
+         анимирует BattleViewModel через OffsetY/Opacity. Крит — крупнее и золотом. -->
+    <DataTemplate x:Key="FloatingTextTemplate" DataType="{x:Type vmBattle:FloatingTextViewModel}">
+        <TextBlock Text="{Binding Text}"
+                   Opacity="{Binding Opacity}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Bottom"
+                   TextAlignment="Center"
+                   FontWeight="Bold"
+                   FontSize="{StaticResource FontSizeFloat}"
+                   Margin="0,0,0,6"
+                   RenderTransformOrigin="0.5,0.5">
+            <TextBlock.RenderTransform>
+                <TranslateTransform Y="{Binding OffsetY}" />
+            </TextBlock.RenderTransform>
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Foreground"
+                            Value="{StaticResource DangerBrush}" />
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect Color="Black"
+                                              BlurRadius="4"
+                                              ShadowDepth="1" />
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsHeal}"
+                                     Value="True">
+                            <Setter Property="Foreground"
+                                    Value="{StaticResource HpBrush}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsCrit}"
+                                     Value="True">
+                            <Setter Property="FontSize"
+                                    Value="{StaticResource FontSizeFloatCrit}" />
+                            <Setter Property="Foreground"
+                                    Value="{StaticResource AccentBrush}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+    </DataTemplate>
 
     <!-- Карточка юнита: две линии (информативная, статы внутри) -->
     <DataTemplate x:Key="UnitCardTemplate" DataType="{x:Type vmBattle:UnitCardViewModel}">
@@ -332,7 +421,8 @@
                     </Style.Triggers>
                 </Style>
             </Border.Style>
-            <StackPanel>
+            <Grid>
+                <StackPanel>
                 <DockPanel>
                     <Border Background="{StaticResource AccentBrush}"
                             CornerRadius="3"
@@ -393,7 +483,17 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-            </StackPanel>
+                </StackPanel>
+                <ItemsControl ItemsSource="{Binding FloatingTexts}"
+                              IsHitTestVisible="False"
+                              ItemTemplate="{StaticResource FloatingTextTemplate}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Grid />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </Grid>
         </Border>
     </DataTemplate>
 
@@ -484,7 +584,8 @@
                     </Style.Triggers>
                 </Style>
             </Border.Style>
-            <StackPanel>
+            <Grid>
+                <StackPanel>
                 <TextBlock Text="{Binding Unit.DisplayName}"
                            Foreground="{StaticResource TextBrush}"
                            FontSize="{StaticResource FontSizeLineName}"
@@ -539,7 +640,17 @@
                         </TextBlock.Effect>
                     </TextBlock>
                 </Grid>
-            </StackPanel>
+                </StackPanel>
+                <ItemsControl ItemsSource="{Binding FloatingTexts}"
+                              IsHitTestVisible="False"
+                              ItemTemplate="{StaticResource FloatingTextTemplate}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Grid />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </Grid>
         </Border>
     </DataTemplate>
 
