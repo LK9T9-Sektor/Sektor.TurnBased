@@ -13,7 +13,8 @@
 - `src/Core/Sektor.TurnBased.Core.Abstractions/` — контракты ядра: `IGameState`, `IGameCommand`, `PhaseTransition`, `Result`, `Result<T>`.
 - `src/Core/Sektor.TurnBased.Core/` — ядро: `GamePipeline`, `IGamePhase`, `GameContext`, `GameEventBus`, `VisualQueue`, `VisualEvent`, `GameLog`, `ContentRegistry`, `DeterministicRng`.
 - `src/Battle/Sektor.TurnBased.Battle/` — первая игра на ядре: `Model/` (данные-ресурсы), `Effects/` (эффекты и прекондиции), `Rules/` (порядок ходов, условия победы), `Phases/`, `Content/` (каталог + валидация), `Events/`, `Commands/`, фасад `BattleEngine` + `BattleAi` + `BattleExecutor`.
-- `tests/` — `Sektor.TurnBased.Core.Tests` (24 теста), `Sektor.TurnBased.Battle.Tests` (42 теста).
+- `src/Dialog/Sektor.TurnBased.Dialog/` — вторая игра на ядре: фазовый диалог/квест с ветвлениями по флагам и вложенным диалогом через `CreateChildPipeline` (см. `docs/dialog.md`). `Model/` (узлы/варианты/состояние), `Content/` (каталог + валидация), `Phases/`, `Events/`, `Commands/`, фасад `DialogEngine` + `DialogEventSink`.
+- `tests/` — `Sektor.TurnBased.Core.Tests` (24 теста), `Sektor.TurnBased.Battle.Tests` (42 теста), `Sektor.TurnBased.Dialog.Tests` (21 тест).
 
 ## Конвенции кода
 
