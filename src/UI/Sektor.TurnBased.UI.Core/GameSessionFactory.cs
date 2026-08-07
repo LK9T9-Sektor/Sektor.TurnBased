@@ -28,9 +28,12 @@ public static class GameSessionFactory
         {
             ["hero_warrior"] = "Воин",
             ["hero_rogue"] = "Разбойник",
-            ["goblin"] = "Гоблин",
-            ["ogre"] = "Огр",
-            ["goblin_shaman"] = "Гоблин-шаман",
+            ["hero_archer"] = "Лучник",
+            ["hero_priestess"] = "Жрица",
+            ["skeleton"] = "Скелет",
+            ["zombie"] = "Зомби",
+            ["skeleton_archer"] = "Скелет-лучник",
+            ["skeleton_mage"] = "Скелет-маг",
             ["player"] = "Игрок",
             ["enemy"] = "Враг",
         };

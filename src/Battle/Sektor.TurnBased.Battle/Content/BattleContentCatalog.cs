@@ -66,20 +66,32 @@ public static class BattleContentCatalog
 
         var templates = new List<ActorTemplateDefinition>
         {
+            // Герои (отряд из Blades)
             new("hero_warrior", "player", "player",
                 new Dictionary<string, int> { ["health"] = 100, ["attack"] = 12, ["armor"] = 3, ["initiative"] = 8 },
                 new[] { "basic_attack", "power_attack", "battle_rage", "heal" }),
             new("hero_rogue", "player", "player",
                 new Dictionary<string, int> { ["health"] = 80, ["attack"] = 15, ["armor"] = 1, ["initiative"] = 12 },
                 new[] { "basic_attack", "power_attack" }),
-            new("goblin", "enemy", "ai",
+            new("hero_archer", "player", "player",
+                new Dictionary<string, int> { ["health"] = 70, ["attack"] = 10, ["armor"] = 1, ["initiative"] = 10 },
+                new[] { "basic_attack", "power_attack" }),
+            new("hero_priestess", "player", "player",
+                new Dictionary<string, int> { ["health"] = 90, ["attack"] = 5, ["armor"] = 2, ["initiative"] = 6 },
+                new[] { "basic_attack", "heal" }),
+
+            // Враги (нежить из Blades)
+            new("skeleton", "enemy", "ai",
                 new Dictionary<string, int> { ["health"] = 30, ["attack"] = 7, ["armor"] = 0, ["initiative"] = 5 },
                 new[] { "basic_attack" }),
-            new("ogre", "enemy", "ai",
-                new Dictionary<string, int> { ["health"] = 70, ["attack"] = 10, ["armor"] = 4, ["initiative"] = 3 },
-                new[] { "basic_attack", "power_attack", "strike_and_stun" }),
-            new("goblin_shaman", "enemy", "ai",
-                new Dictionary<string, int> { ["health"] = 25, ["attack"] = 5, ["armor"] = 0, ["initiative"] = 6 },
+            new("zombie", "enemy", "ai",
+                new Dictionary<string, int> { ["health"] = 60, ["attack"] = 4, ["armor"] = 2, ["initiative"] = 3 },
+                new[] { "basic_attack" }),
+            new("skeleton_archer", "enemy", "ai",
+                new Dictionary<string, int> { ["health"] = 25, ["attack"] = 9, ["armor"] = 0, ["initiative"] = 7 },
+                new[] { "basic_attack", "power_attack" }),
+            new("skeleton_mage", "enemy", "ai",
+                new Dictionary<string, int> { ["health"] = 20, ["attack"] = 6, ["armor"] = 0, ["initiative"] = 6 },
                 new[] { "basic_attack", "heal" }),
         };
 

@@ -12,9 +12,9 @@ public class RulesTests
     {
         var (content, battleContent) = TestContent.Build();
         var state = TestContent.CreateState(battleContent);
-        TestContent.AddActor(state, content, "a", "goblin", "enemy", "ai", ("health", 10));
-        TestContent.AddActor(state, content, "b", "goblin", "enemy", "ai", ("health", 10));
-        TestContent.AddActor(state, content, "c", "goblin", "enemy", "ai", ("health", 10));
+        TestContent.AddActor(state, content, "a", "skeleton", "enemy", "ai", ("health", 10));
+        TestContent.AddActor(state, content, "b", "skeleton", "enemy", "ai", ("health", 10));
+        TestContent.AddActor(state, content, "c", "skeleton", "enemy", "ai", ("health", 10));
 
         var order = new FixedOrderRule("fixed").Order(state, new DeterministicRng(1));
 
@@ -26,8 +26,8 @@ public class RulesTests
     {
         var (content, battleContent) = TestContent.Build();
         var state = TestContent.CreateState(battleContent);
-        TestContent.AddActor(state, content, "slow", "goblin", "enemy", "ai", ("health", 10), ("initiative", 5));
-        TestContent.AddActor(state, content, "fast", "goblin", "enemy", "ai", ("health", 10), ("initiative", 12));
+        TestContent.AddActor(state, content, "slow", "skeleton", "enemy", "ai", ("health", 10), ("initiative", 5));
+        TestContent.AddActor(state, content, "fast", "skeleton", "enemy", "ai", ("health", 10), ("initiative", 12));
 
         var order = new SpeedInitiativeRule("initiative").Order(state, new DeterministicRng(1));
 
@@ -44,8 +44,8 @@ public class RulesTests
         var state2 = TestContent.CreateState(battleContent);
         for (var i = 0; i < 5; i++)
         {
-            TestContent.AddActor(state1, content, $"a{i}", "goblin", "enemy", "ai", ("health", 10), ("initiative", 5));
-            TestContent.AddActor(state2, content, $"a{i}", "goblin", "enemy", "ai", ("health", 10), ("initiative", 5));
+            TestContent.AddActor(state1, content, $"a{i}", "skeleton", "enemy", "ai", ("health", 10), ("initiative", 5));
+            TestContent.AddActor(state2, content, $"a{i}", "skeleton", "enemy", "ai", ("health", 10), ("initiative", 5));
         }
 
         var rule = new SpeedInitiativeRule("initiative");
@@ -61,9 +61,9 @@ public class RulesTests
         var (content, battleContent) = TestContent.Build();
         var state = TestContent.CreateState(battleContent);
         TestContent.AddActor(state, content, "p1", "hero_warrior", "player", "player", ("health", 10));
-        TestContent.AddActor(state, content, "e1", "goblin", "enemy", "ai", ("health", 10));
+        TestContent.AddActor(state, content, "e1", "skeleton", "enemy", "ai", ("health", 10));
         TestContent.AddActor(state, content, "p2", "hero_warrior", "player", "player", ("health", 10));
-        TestContent.AddActor(state, content, "e2", "goblin", "enemy", "ai", ("health", 10));
+        TestContent.AddActor(state, content, "e2", "skeleton", "enemy", "ai", ("health", 10));
 
         var order = new TeamAlternationRule("alternation").Order(state, new DeterministicRng(1));
 
@@ -76,7 +76,7 @@ public class RulesTests
         var (content, battleContent) = TestContent.Build();
         var state = TestContent.CreateState(battleContent);
         var alive = TestContent.AddActor(state, content, "p1", "hero_warrior", "player", "player", ("health", 10));
-        TestContent.AddActor(state, content, "e1", "goblin", "enemy", "ai", ("health", 0));
+        TestContent.AddActor(state, content, "e1", "skeleton", "enemy", "ai", ("health", 0));
 
         var winner = new ExterminationCondition("extermination").WinnerTeamId(state);
 
@@ -89,7 +89,7 @@ public class RulesTests
         var (content, battleContent) = TestContent.Build();
         var state = TestContent.CreateState(battleContent);
         TestContent.AddActor(state, content, "p1", "hero_warrior", "player", "player", ("health", 10));
-        TestContent.AddActor(state, content, "e1", "goblin", "enemy", "ai", ("health", 10));
+        TestContent.AddActor(state, content, "e1", "skeleton", "enemy", "ai", ("health", 10));
 
         var winner = new ExterminationCondition("extermination").WinnerTeamId(state);
 

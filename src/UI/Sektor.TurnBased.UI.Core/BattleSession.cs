@@ -56,11 +56,14 @@ public sealed class BattleSession : GameSession
             state.TurnIndex,
             currentActorId,
             state.WinnerTeamId,
+            TurnOrder(state),
             actors,
             AvailableActions(state, currentActorId));
     }
 
     protected override Result StartCore() => _engine.Start();
+
+    private IReadOnlyList<string> TurnOrder(BattleState state) => state.Order.ToList();
 
     private string? CurrentActorId(BattleState state) =>
         state.Order.Count > 0 && state.TurnIndex < state.Order.Count

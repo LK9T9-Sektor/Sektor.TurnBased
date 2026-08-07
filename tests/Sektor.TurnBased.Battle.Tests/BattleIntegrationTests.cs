@@ -22,22 +22,22 @@ public class BattleIntegrationTests
     {
         var (content, battleContent) = TestContent.Build();
         var context = new GameContext(new EmptyState(), rng: new DeterministicRng(42), content: content);
-        var filtered = TestContent.WithTemplates(battleContent, "hero_warrior", "goblin");
+        var filtered = TestContent.WithTemplates(battleContent, "hero_warrior", "skeleton");
 
         var engine = RunBattle(
             context,
             content,
             filtered,
             new BattleConfig("initiative", "extermination"),
-            new UseActionCommand("hero_warrior_0", "basic_attack", new[] { "goblin_1" }));
+            new UseActionCommand("hero_warrior_0", "basic_attack", new[] { "skeleton_1" }));
 
         Assert.True(engine.IsFinished);
         Assert.False(engine.IsSuspended);
         Assert.Equal("player", engine.State.WinnerTeamId);
 
         Assert.Contains(context.Log.Entries, e => e == "Round 1 started");
-        Assert.Contains(context.Log.Entries, e => e == "goblin_1 health -12 -> 18");
-        Assert.Contains(context.Log.Entries, e => e == "goblin_1 died");
+        Assert.Contains(context.Log.Entries, e => e == "skeleton_1 health -12 -> 18");
+        Assert.Contains(context.Log.Entries, e => e == "skeleton_1 died");
         Assert.Contains(context.Log.Entries, e => e == "Battle ended: winner is player");
     }
 
@@ -56,14 +56,14 @@ public class BattleIntegrationTests
     {
         var (content, battleContent) = TestContent.Build();
         var context = new GameContext(new EmptyState(), rng: new DeterministicRng(42), content: content);
-        var filtered = TestContent.WithTemplates(battleContent, "hero_warrior", "goblin");
+        var filtered = TestContent.WithTemplates(battleContent, "hero_warrior", "skeleton");
 
         var engine = RunBattle(
             context,
             content,
             filtered,
             new BattleConfig("initiative", "extermination", MaxRounds: 2),
-            new UseActionCommand("hero_warrior_0", "basic_attack", new[] { "goblin_1" }));
+            new UseActionCommand("hero_warrior_0", "basic_attack", new[] { "skeleton_1" }));
 
         Assert.True(engine.IsFinished);
         Assert.Null(engine.State.WinnerTeamId);
@@ -75,7 +75,7 @@ public class BattleIntegrationTests
     {
         var (content, battleContent) = TestContent.Build();
         var context = new GameContext(new EmptyState(), rng: new DeterministicRng(42), content: content);
-        var filtered = TestContent.WithTemplates(battleContent, "hero_warrior", "goblin");
+        var filtered = TestContent.WithTemplates(battleContent, "hero_warrior", "skeleton");
         var engineResult = BattleEngine.Create(context, content, filtered, new BattleConfig("initiative", "extermination"));
         Assert.True(engineResult.IsSuccess);
         var engine = engineResult.Value!;
@@ -85,10 +85,10 @@ public class BattleIntegrationTests
             Assert.True(engine.Advance().IsSuccess);
 
         Assert.True(engine.IsSuspended);
-        var wrong = engine.ProcessCommand(new UseActionCommand("goblin_1", "basic_attack", new[] { "hero_warrior_0" }));
+        var wrong = engine.ProcessCommand(new UseActionCommand("skeleton_1", "basic_attack", new[] { "hero_warrior_0" }));
         Assert.True(wrong.IsFailure);
 
-        var right = engine.ProcessCommand(new UseActionCommand("hero_warrior_0", "basic_attack", new[] { "goblin_1" }));
+        var right = engine.ProcessCommand(new UseActionCommand("hero_warrior_0", "basic_attack", new[] { "skeleton_1" }));
         Assert.True(right.IsSuccess);
         Assert.False(engine.IsSuspended);
     }
@@ -97,14 +97,14 @@ public class BattleIntegrationTests
     {
         var (content, battleContent) = TestContent.Build();
         var context = new GameContext(new EmptyState(), rng: new DeterministicRng(seed), content: content);
-        var filtered = TestContent.WithTemplates(battleContent, "hero_warrior", "goblin");
+        var filtered = TestContent.WithTemplates(battleContent, "hero_warrior", "skeleton");
 
         RunBattle(
             context,
             content,
             filtered,
             new BattleConfig("initiative", "extermination"),
-            new UseActionCommand("hero_warrior_0", "basic_attack", new[] { "goblin_1" }));
+            new UseActionCommand("hero_warrior_0", "basic_attack", new[] { "skeleton_1" }));
 
         return (context.Log.Entries.ToList(), DrainVisuals(context.Visuals));
     }

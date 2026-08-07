@@ -22,7 +22,7 @@ public class SkipTurnTests
     {
         var (content, battleContent) = TestContent.Build();
         var context = new GameContext(new EmptyState(), rng: new DeterministicRng(42), content: content);
-        var filtered = TestContent.WithTemplates(battleContent, "hero_warrior", "goblin");
+        var filtered = TestContent.WithTemplates(battleContent, "hero_warrior", "skeleton");
 
         var engineResult = BattleEngine.Create(context, content, filtered, new BattleConfig("initiative", "extermination"));
         Assert.True(engineResult.IsSuccess);
@@ -44,7 +44,7 @@ public class SkipTurnTests
     {
         var (content, battleContent) = TestContent.Build();
         var context = new GameContext(new EmptyState(), rng: new DeterministicRng(42), content: content);
-        var filtered = TestContent.WithTemplates(battleContent, "hero_warrior", "goblin");
+        var filtered = TestContent.WithTemplates(battleContent, "hero_warrior", "skeleton");
 
         var engineResult = BattleEngine.Create(context, content, filtered, new BattleConfig("initiative", "extermination"));
         Assert.True(engineResult.IsSuccess);
@@ -65,7 +65,7 @@ public class SkipTurnTests
     {
         var (content, battleContent) = TestContent.Build();
         var context = new GameContext(new EmptyState(), rng: new DeterministicRng(42), content: content);
-        var filtered = TestContent.WithTemplates(battleContent, "hero_warrior", "goblin");
+        var filtered = TestContent.WithTemplates(battleContent, "hero_warrior", "skeleton");
 
         var engineResult = BattleEngine.Create(context, content, filtered, new BattleConfig("initiative", "extermination"));
         Assert.True(engineResult.IsSuccess);
@@ -74,9 +74,9 @@ public class SkipTurnTests
         while (engine.IsSuspended is false && engine.IsFinished is false)
             Assert.True(engine.Advance().IsSuccess);
 
-        var result = engine.ProcessCommand(new SkipTurnCommand("goblin_1"));
+        var result = engine.ProcessCommand(new SkipTurnCommand("skeleton_1"));
         Assert.True(result.IsFailure);
-        Assert.Contains("goblin_1", result.Error);
+        Assert.Contains("skeleton_1", result.Error);
     }
 
     private static List<(string EventType, string Source, string? Target, int Value)> DrainVisuals(VisualQueue visuals)

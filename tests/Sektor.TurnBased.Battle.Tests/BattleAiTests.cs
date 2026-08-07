@@ -21,11 +21,11 @@ public class BattleAiTests
     public void ChooseCommand_PicksHighestDamageTarget()
     {
         var (state, ai, context) = Create();
-        var goblin = TestContent.AddActor(state, context.Content, "goblin", "goblin", "enemy", "ai", ("attack", 7), ("health", 30));
+        var skeleton = TestContent.AddActor(state, context.Content, "skeleton", "skeleton", "enemy", "ai", ("attack", 7), ("health", 30));
         var armored = TestContent.AddActor(state, context.Content, "warrior", "hero_warrior", "player", "player", ("health", 100), ("armor", 3));
         var rogue = TestContent.AddActor(state, context.Content, "rogue", "hero_rogue", "player", "player", ("health", 80), ("armor", 1));
 
-        var command = ai.ChooseCommand(goblin.RuntimeId);
+        var command = ai.ChooseCommand(skeleton.RuntimeId);
 
         Assert.NotNull(command);
         Assert.Equal("basic_attack", command.ActionId);
@@ -37,11 +37,11 @@ public class BattleAiTests
     public void ChooseCommand_TieDamage_PicksWeakerTarget()
     {
         var (state, ai, context) = Create();
-        var goblin = TestContent.AddActor(state, context.Content, "goblin", "goblin", "enemy", "ai", ("attack", 7), ("health", 30));
+        var skeleton = TestContent.AddActor(state, context.Content, "skeleton", "skeleton", "enemy", "ai", ("attack", 7), ("health", 30));
         var tougher = TestContent.AddActor(state, context.Content, "hero", "hero_warrior", "player", "player", ("health", 50), ("armor", 0));
         var weaker = TestContent.AddActor(state, context.Content, "hero2", "hero_warrior", "player", "player", ("health", 30), ("armor", 0));
 
-        var command = ai.ChooseCommand(goblin.RuntimeId);
+        var command = ai.ChooseCommand(skeleton.RuntimeId);
 
         Assert.NotNull(command);
         Assert.Equal(new[] { weaker.RuntimeId }, command.TargetActorIds);
@@ -52,7 +52,7 @@ public class BattleAiTests
     public void ChooseCommand_ReturnsNull_ForDeadActor()
     {
         var (state, ai, context) = Create();
-        var dead = TestContent.AddActor(state, context.Content, "goblin", "goblin", "enemy", "ai", ("health", 0));
+        var dead = TestContent.AddActor(state, context.Content, "skeleton", "skeleton", "enemy", "ai", ("health", 0));
 
         var command = ai.ChooseCommand(dead.RuntimeId);
 

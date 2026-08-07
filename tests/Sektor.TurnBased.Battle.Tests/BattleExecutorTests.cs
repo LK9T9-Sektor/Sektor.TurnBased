@@ -27,12 +27,12 @@ public class BattleExecutorTests
     {
         var (state, executor, context) = Create();
         var hero = TestContent.AddActor(state, context.Content, "hero", "hero_warrior", "player", "player", ("attack", 12), ("health", 100));
-        var goblin = TestContent.AddActor(state, context.Content, "goblin", "goblin", "enemy", "ai", ("health", 30));
+        var skeleton = TestContent.AddActor(state, context.Content, "skeleton", "skeleton", "enemy", "ai", ("health", 30));
 
-        var result = executor.Execute(Attack(hero.RuntimeId, goblin.RuntimeId));
+        var result = executor.Execute(Attack(hero.RuntimeId, skeleton.RuntimeId));
 
         Assert.True(result.IsSuccess);
-        Assert.True(goblin.Resources.TryGetCurrent("health", out var health));
+        Assert.True(skeleton.Resources.TryGetCurrent("health", out var health));
         Assert.Equal(18, health);
         Assert.Contains(context.Log.Entries, e => e.Contains("uses basic_attack"));
     }
@@ -41,8 +41,8 @@ public class BattleExecutorTests
     public void Execute_UnknownActor_Fails()
     {
         var (state, executor, context) = Create();
-        var goblin = TestContent.AddActor(state, context.Content, "goblin", "goblin", "enemy", "ai", ("health", 30));
-        var result = executor.Execute(Attack("missing", goblin.RuntimeId));
+        var skeleton = TestContent.AddActor(state, context.Content, "skeleton", "skeleton", "enemy", "ai", ("health", 30));
+        var result = executor.Execute(Attack("missing", skeleton.RuntimeId));
 
         Assert.True(result.IsFailure);
     }
@@ -52,9 +52,9 @@ public class BattleExecutorTests
     {
         var (state, executor, context) = Create();
         var hero = TestContent.AddActor(state, context.Content, "hero", "hero_warrior", "player", "player", ("health", 0));
-        var goblin = TestContent.AddActor(state, context.Content, "goblin", "goblin", "enemy", "ai", ("health", 30));
+        var skeleton = TestContent.AddActor(state, context.Content, "skeleton", "skeleton", "enemy", "ai", ("health", 30));
 
-        var result = executor.Execute(Attack(hero.RuntimeId, goblin.RuntimeId));
+        var result = executor.Execute(Attack(hero.RuntimeId, skeleton.RuntimeId));
 
         Assert.True(result.IsFailure);
         Assert.Contains("dead", result.Error!);
@@ -65,9 +65,9 @@ public class BattleExecutorTests
     {
         var (state, executor, context) = Create();
         var rogue = TestContent.AddActor(state, context.Content, "rogue", "hero_rogue", "player", "player", ("health", 10));
-        var goblin = TestContent.AddActor(state, context.Content, "goblin", "goblin", "enemy", "ai", ("health", 30));
+        var skeleton = TestContent.AddActor(state, context.Content, "skeleton", "skeleton", "enemy", "ai", ("health", 30));
 
-        var result = executor.Execute(Attack(rogue.RuntimeId, goblin.RuntimeId, "battle_rage"));
+        var result = executor.Execute(Attack(rogue.RuntimeId, skeleton.RuntimeId, "battle_rage"));
 
         Assert.True(result.IsFailure);
         Assert.Contains("not available", result.Error!);
@@ -78,7 +78,7 @@ public class BattleExecutorTests
     {
         var (state, executor, context) = Create();
         var hero = TestContent.AddActor(state, context.Content, "hero", "hero_warrior", "player", "player", ("attack", 12), ("health", 100));
-        var dead = TestContent.AddActor(state, context.Content, "goblin", "goblin", "enemy", "ai", ("health", 0));
+        var dead = TestContent.AddActor(state, context.Content, "skeleton", "skeleton", "enemy", "ai", ("health", 0));
 
         var result = executor.Execute(Attack(hero.RuntimeId, dead.RuntimeId));
 
@@ -104,13 +104,13 @@ public class BattleExecutorTests
     {
         var (state, executor, context) = Create();
         var hero = TestContent.AddActor(state, context.Content, "hero", "hero_warrior", "player", "player", ("attack", 12), ("health", 100));
-        var goblin = TestContent.AddActor(state, context.Content, "goblin", "goblin", "enemy", "ai", ("health", 10));
+        var skeleton = TestContent.AddActor(state, context.Content, "skeleton", "skeleton", "enemy", "ai", ("health", 10));
 
-        var result = executor.Execute(Attack(hero.RuntimeId, goblin.RuntimeId));
+        var result = executor.Execute(Attack(hero.RuntimeId, skeleton.RuntimeId));
 
         Assert.True(result.IsSuccess);
-        Assert.False(state.IsAlive(goblin.RuntimeId));
-        Assert.Contains(context.Log.Entries, e => e == "goblin died");
+        Assert.False(state.IsAlive(skeleton.RuntimeId));
+        Assert.Contains(context.Log.Entries, e => e == "skeleton died");
     }
 
     [Fact]

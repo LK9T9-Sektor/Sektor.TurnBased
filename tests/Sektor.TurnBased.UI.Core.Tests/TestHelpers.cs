@@ -25,7 +25,7 @@ internal static class TestHelpers
         if (build.IsFailure)
             throw new InvalidOperationException($"Battle content failed: {build.Error}");
 
-        var filtered = FilterTemplates(build.Value!, "hero_warrior", "goblin");
+        var filtered = FilterTemplates(build.Value!, "hero_warrior", "skeleton");
         var context = new GameContext(new EmptyState(), rng: new DeterministicRng(seed), content: content);
         var created = BattleSession.Create(context, content, filtered, new BattleConfig("initiative", "extermination"));
         if (created.IsFailure)

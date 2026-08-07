@@ -13,7 +13,7 @@ public class EffectsTests
         var (content, battleContent) = TestContent.Build();
         var state = TestContent.CreateState(battleContent);
         var source = TestContent.AddActor(state, content, "hero", "hero_warrior", "player", "player", ("attack", 10));
-        var target = TestContent.AddActor(state, content, "goblin", "goblin", "enemy", "ai", ("health", 30), ("armor", 4));
+        var target = TestContent.AddActor(state, content, "skeleton", "skeleton", "enemy", "ai", ("health", 30), ("armor", 4));
         var context = TestContent.CreateContext(state, content, source.RuntimeId, new[] { target.RuntimeId });
 
         var effect = new DamageEffect("dmg", "health", sourceStatId: "attack", mitigationStatId: "armor");
@@ -30,7 +30,7 @@ public class EffectsTests
         var (content, battleContent) = TestContent.Build();
         var state = TestContent.CreateState(battleContent);
         var source = TestContent.AddActor(state, content, "hero", "hero_warrior", "player", "player", ("attack", 10));
-        var target = TestContent.AddActor(state, content, "goblin", "goblin", "enemy", "ai", ("health", 30));
+        var target = TestContent.AddActor(state, content, "skeleton", "skeleton", "enemy", "ai", ("health", 30));
         var context = TestContent.CreateContext(state, content, source.RuntimeId, new[] { target.RuntimeId });
 
         var effect = new DamageEffect("dmg", "health", sourceStatId: "attack");
@@ -47,7 +47,7 @@ public class EffectsTests
         var (content, battleContent) = TestContent.Build();
         var state = TestContent.CreateState(battleContent);
         var source = TestContent.AddActor(state, content, "hero", "hero_warrior", "player", "player", ("attack", 10));
-        var target = TestContent.AddActor(state, content, "goblin", "goblin", "enemy", "ai", ("health", 30), ("armor", 4));
+        var target = TestContent.AddActor(state, content, "skeleton", "skeleton", "enemy", "ai", ("health", 30), ("armor", 4));
         var context = TestContent.CreateContext(state, content, source.RuntimeId, new[] { target.RuntimeId });
 
         var effect = new DamageEffect("dmg", "health", sourceStatId: "attack", mitigationStatId: "armor");
@@ -110,7 +110,7 @@ public class EffectsTests
         var (content, battleContent) = TestContent.Build();
         var state = TestContent.CreateState(battleContent);
         var source = TestContent.AddActor(state, content, "hero", "hero_warrior", "player", "player", ("health", 10));
-        var dead = TestContent.AddActor(state, content, "goblin", "goblin", "enemy", "ai", ("health", 0));
+        var dead = TestContent.AddActor(state, content, "skeleton", "skeleton", "enemy", "ai", ("health", 0));
         var context = TestContent.CreateContext(state, content, source.RuntimeId, new[] { dead.RuntimeId });
 
         var precondition = new TargetsAlivePrecondition("targets_alive");
