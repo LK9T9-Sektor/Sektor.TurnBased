@@ -3,7 +3,11 @@
     <Project Path="src/Core/Sektor.TurnBased.Core.Abstractions/Sektor.TurnBased.Core.Abstractions.csproj" />
     <Project Path="src/Core/Sektor.TurnBased.Core/Sektor.TurnBased.Core.csproj" />
   </Folder>
+  <Folder Name="/Battle/">
+    <Project Path="src/Battle/Sektor.TurnBased.Battle/Sektor.TurnBased.Battle.csproj" />
+  </Folder>
   <Folder Name="/Tests/">
     <Project Path="tests/Sektor.TurnBased.Core.Tests/Sektor.TurnBased.Core.Tests.csproj" />
+    <Project Path="tests/Sektor.TurnBased.Battle.Tests/Sektor.TurnBased.Battle.Tests.csproj" />
   </Folder>
 </Solution>
