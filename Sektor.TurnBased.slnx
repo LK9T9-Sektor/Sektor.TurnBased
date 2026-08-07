@@ -1,5 +1,9 @@
 <Solution>
-  <Folder Name="/GameCore/">
-    <Project Path="src/GameCore/Sektor.TurnBased.GameCore/Sektor.TurnBased.GameCore.csproj" />
+  <Folder Name="/Core/">
+    <Project Path="src/Core/Sektor.TurnBased.Core.Abstractions/Sektor.TurnBased.Core.Abstractions.csproj" />
+    <Project Path="src/Core/Sektor.TurnBased.Core/Sektor.TurnBased.Core.csproj" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="tests/Sektor.TurnBased.Core.Tests/Sektor.TurnBased.Core.Tests.csproj" />
   </Folder>
 </Solution>

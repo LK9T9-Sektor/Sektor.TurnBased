@@ -1,12 +1,12 @@
-﻿namespace Sektor.TurnBased.GameCore.Visuals;
+namespace Sektor.TurnBased.Core;
 
 /// <summary>
 /// Описание визуального события для очереди анимаций UI.
 /// Позволяет отделить мгновенную логику ядра от плавной отрисовки.
+/// EventType — строка ("Damage", "Heal", "StatusApply", "Shake", ...), а не enum.
 /// </summary>
-public class VisualEvent
+public sealed class VisualEvent
 {
-    /// <summary>Тип события: "Damage", "Heal", "StatusApply", "Shake", "Flash" и т.д.</summary>
     public string EventType { get; set; } = string.Empty;
 
     /// <summary>ID инициатора (SourceActorId или ActionId).</summary>
@@ -15,7 +15,6 @@ public class VisualEvent
     /// <summary>ID цели (может быть null для глобальных эффектов).</summary>
     public string? TargetRuntimeId { get; set; }
 
-    /// <summary>Числовое значение (урон, лечение, стаки).</summary>
     public int Value { get; set; }
 
     /// <summary>Дополнительные данные для рендерера (координаты, цвета, тексты).</summary>

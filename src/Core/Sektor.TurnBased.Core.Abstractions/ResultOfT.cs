@@ -1,11 +1,11 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
-namespace Sektor.TurnBased.GameCore.Extensions;
+namespace Sektor.TurnBased.Core.Abstractions;
 
 /// <summary>
-/// Высокопроизводительная обёртка результата без исключений.
-/// Используется для безопасной передачи значений или ошибок в транзакционных операциях.
+/// Результат операции с возвращаемым значением.
+/// Канонический способ передачи «значение или ошибка» без исключений.
 /// </summary>
 public readonly struct Result<T>
 {
