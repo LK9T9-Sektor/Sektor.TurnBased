@@ -1,0 +1,134 @@
+# .opencodeignore - Files and folders AI agents should not read
+
+## Unity-Specific
+Library/
+Temp/
+Logs/
+*.unitypackage
+ProjectSettings/
+Packages/
+Assets/Plugins/
+Assets/StreamingAssets/
+Assets/Resources/
+*.asset
+*.prefab
+*.mat
+*.anim
+*.controller
+*.unity
+*.meta
+UnityPackageManager/
+
+## .NET / C# / WPF Build Outputs
+bin/
+obj/
+Debug/
+Release/
+x64/
+x86/
+WIN32/
+ARM/
+ARM64/
+bld/
+Out/
+publish/
+Generated\ Files/
+*_i.c
+*_p.c
+*_h.h
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.ilk
+*.meta
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
+*.binlog
+
+## IDE / Editor Files
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+*.DotSettings.user
+*.rsuser
+_ReSharper*/
+*.[Rr]e[Ss]harper
+.cr/personal
+.localhistory/
+.idea/
+*.iml
+
+## Package Restore / Dependencies
+packages/
+*.nupkg
+*.snupkg
+paket-files/
+node_modules/
+
+## Build Logs and Traces
+*.log
+*.svclog
+*.e2e
+*.psess
+*.vsp
+*.vspx
+[Ll]og/
+[Ll]ogs/
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+## Test Coverage
+*.coverage
+*.coveragexml
+*.dotCover
+coverage*.json
+coverage*.xml
+coverage*.info
+_OpenCover/
+
+## Cache Files
+*.[Cc]ache
+.sass-cache/
+.ipch/
+
+## Summary and Temporary Files
+*.pidb
+*.psess
+*.vssscc
+.builds
+*.pidb
+~$*
+*~
+*.bak
+*.backup
+*.tmp
+*.temp
+
+## Azure / Cloud
+csx/
+*.build.csdef
+ecf/
+rcf/
+AppPackages/
+BundleArtifacts/
+
+## Other Tooling
+_BenchmarkDotNet.Artifacts/
+_Chutzpah*
+_NCrunch_*
+.*crunch*.local.xml
+.mfractor/
+.ionide/
+FodyWeavers.xsd
