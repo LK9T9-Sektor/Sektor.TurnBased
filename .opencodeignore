@@ -19,6 +19,23 @@ Assets/Resources/
 *.meta
 UnityPackageManager/
 
+# Unity-Specific (Дополнения)
+.mono/
+.burst/
+/[Ll]egacy/**/[Aa]ssets/[Mm]odels/
+/[Ll]egacy/**/[Aa]ssets/[Tt]extures/
+/[Ll]egacy/**/[Aa]ssets/[Aa]udio/
+*.fbx
+*.obj
+*.png
+*.jpg
+*.tga
+*.wav
+*.mp3
+*.compute
+*.shader
+*.cginc
+
 ## .NET / C# / WPF Build Outputs
 bin/
 obj/
@@ -53,6 +70,30 @@ Generated\ Files/
 *.tmp_proj
 *_wpftmp.csproj
 *.binlog
+
+# .NET / C# / WPF Build Outputs (Дополнения)
+*.dll
+*.exe
+*.suo
+# Нативные библиотеки Steam API
+steam_api.dll
+steam_api64.dll
+libsteam_api.so
+libsteam_api.dylib
+# Сгенерированные файлы WPF (BAML — скомпилированный XAML)
+*.baml
+# Файлы документации пакетов (забивают контекст)
+*.xml
+!/src/**/*.xml    # Исключение: разрешаем ИИ видеть ваши XML-доки из AGENTS.md
+
+# OS / Git / Environment
+.DS_Store
+Thumbs.db
+Desktop.ini
+.git/
+.gitignore
+.gitattributes
+.opencodeignore
 
 ## IDE / Editor Files
 .vs/
