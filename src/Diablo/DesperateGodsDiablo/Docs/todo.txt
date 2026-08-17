@@ -1,0 +1,103 @@
++Create/join server
++Copy short link for joining specific server
++Display connected players
++Display player cursors
++Colored cursors
++Dice with physics and shadows
++Recover dice that fall off screen
++Render 3D text to texture
++ create tile, set tile text, create new rendertexture, render camera to it, assign rendertexture to tile, delete camera and text
++Roll dice (multiple at once)
++Board JSON descriptions
++Move pieces
++Procedurally display board and cards
++Card JSON descriptions
++Zoom to see better
+Add sounds
++ dice
++ tokens
++ cards
++Draw cards
++Tokens knock on board while moving
+++++ rclick?
+Card manipulation:
++ draw card from deck
++++ click on deck and drag away quickly
++ flip card/deck over
++++ rclick?
++ add card to deck
++++ drag card onto deck and release at low speed
++ create deck
++++ three or more cards in collision with similar orientation
++ pick up deck
++++ click on deck and hold in place for a while
++ shuffle deck
++++ shake?
++ rotate card/deck on view axis
++++ ???
++ put top card on bottom
++++ mousewheel?
++Add colored play areas for each player at bottom of screen
++Borders for dice?
++Add coins
++Fix health token reset
++Password 
++Exit back to menu from game
++Chat
++Help
++Card icons
++Preserve aspect ratio on desktop version
++Music play
+x customizable controls
++reduce card "target" values
++Splash screen
+
+Networking:
+Set up our own master server and facilitator
+Perform connection test to investigate when port forwarding is needed
+Check server to see if have latest update
+
+Interface:
+Manual
+Pick up multiple coins at once
+Reset game confirmation dialog (can only be used by server)
+Undo/redo? (to fix griefer damage)
+"Change password" option for server
+More coins
+Coin color should match between card and coin lvl 1
+Deck color should match board colors
+Player colors should match figurine/placemat
+Player colors in chat window
+Some way to tell when others are zoomed
+Automatically right orientation of blood tokens
+
+Graphics:
+UI display (windows and borders?)
+Lower top barrier for easier dice read?
+Investigate possible race condition when rendering to texture
+--- refresh render to texture when context recreated
+--- someone reported moving tile render to Start() helps with unity 4 issues
+Add in-game manual and pancompendium?
+
+Rules:
+Some benefit to doubles
+
+Clarify limbo
+Easier way to put cards on bottom of deck
+Some way to take other player's equipment
+--- Maybe wilderness tile
+Unflinching sword breaks when you die
+Fewer creatures option for shorter games?
+Resurrecting serene way requires sacrificing victory card with non-zero points
+Cemetary: maybe opponent chooses card to fight?
+
+Audio:
+Stone sounds for blood tokens
+Metal sounds for coins
+Crystal sounds for figurines
+
+Art:
+Make backs of cards match board areas
+Make coin icon match 1-coins
+Organize high-res assets for prototype export
+Nicer UI skin

@@ -1,0 +1,360 @@
+{
+  "Wilderness": [
+    {
+      "Title": "Curious Slug",
+      "Type": "Slug Monster",
+      "Target": 2,
+      "Gold": 0,
+      "Points": 1,
+      "Rules": "On loss: skip next turn",
+      "Flavour": "",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Eager Guardian",
+      "Type": "Arachnid Monster",
+      "Target": 2,
+      "Gold": 0,
+      "Points": 2,
+      "Rules": "",
+      "Flavour": "",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Anxious Bandit",
+      "Type": "Human Warrior",
+      "Target": 3,
+      "Gold": 3,
+      "Points": 0,
+      "Rules": "You may pay one silver to avoid this fight",
+      "Flavour": "",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Hostile Rider",
+      "Type": "Flying Wyvern",
+      "Target": 3,
+      "Gold": 2,
+      "Points": 2,
+      "Rules": "On loss: steals a piece of equipment (your choice)",
+      "Flavour": "",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Cold Golem",
+      "Type": "Iron Monster",
+      "Target": 3,
+      "Gold": 2,
+      "Points": 4,
+      "Rules": "On win: roll die, if below 4, fight again",
+      "Flavour": "",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Incensed Wizard",
+      "Type": "Human Wizard",
+      "Target": 3,
+      "Gold": 1,
+      "Points": 1,
+      "Rules": "On loss: teleport to the Hedge Maze",
+      "Flavour": "",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Lonely Flight",
+      "Type": "Minor God",
+      "Target": 3,
+      "Gold": 0,
+      "Points": 2,
+      "Rules": "On loss: take three damage",
+      "Flavour": "",
+      "Duplicates": 1
+    }
+  ],
+  "Dungeon Lvl 1": [
+    {
+      "Title": "Certain Adventurer",
+      "Type": "Lizard Monster",
+      "Target": 4,
+      "Gold": 4,
+      "Points": 0,
+      "Rules": "",
+      "Flavour": "",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Satisfied Ghoul",
+      "Type": "Human Monster",
+      "Target": 3,
+      "Gold": 1,
+      "Points": 3,
+      "Rules": "On loss: steals one of your defeated enemies",
+      "Flavour": "",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Concerned Swordsman",
+      "Type": "Elf Warrior",
+      "Target": 4,
+      "Gold": 2,
+      "Points": 2,
+      "Rules": "On loss: take two damage",
+      "Flavour": "",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Clever Slime",
+      "Type": "Slime Monster",
+      "Target": 4,
+      "Gold": 2,
+      "Points": 4,
+      "Rules": "On loss: discard one equipment card",
+      "Flavour": "",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Nonchalant Guard",
+      "Type": "Orc Monster",
+      "Target": 5,
+      "Gold": 3,
+      "Points": 1,
+      "Rules": "On win: draw a card from town deck",
+      "Flavour": "",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Dominated Baghead",
+      "Type": "Human Monster",
+      "Target": 4,
+      "Gold": 2,
+      "Points": 2,
+      "Rules": "On win: take one damage; On loss: take no damage",
+      "Flavour": "",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Determined Explorer",
+      "Type": "Human Warrior",
+      "Target": 5,
+      "Gold": 5,
+      "Points": 0,
+      "Rules": "Pay two silver to avoid, get extra attack die next battle",
+      "Flavour": "",
+      "Duplicates": 1
+    }
+  ],
+  "Dungeon Lvl 2": [
+    {
+      "Title": "Sympathetic Shadow",
+      "Type": "Minor God",
+      "Target": 5,
+      "Gold": 2,
+      "Points": 4,
+      "Rules": "On loss: move to Darkness",
+      "Flavour": "",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Spirited Shrine",
+      "Type": "Location",
+      "Target": 0,
+      "Gold": 0,
+      "Points": 6,
+      "Rules": "Sacrifice an equipment OR take three damage",
+      "Flavour": "",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Pleased Troll",
+      "Type": "Nocturnal Monster",
+      "Target": 5,
+      "Gold": 3,
+      "Points": 3,
+      "Rules": "On loss: steals a piece of equipment",
+      "Flavour": "",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Engrossed Priestess",
+      "Type": "Human Priestess",
+      "Target": 4,
+      "Gold": 2,
+      "Points": 4,
+      "Rules": "On win: every player takes one damage",
+      "Flavour": "",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Lost Wanderer",
+      "Type": "Undead Monster",
+      "Target": 0,
+      "Gold": 0,
+      "Points": 6,
+      "Rules": "Choose another player to battle",
+      "Flavour": "",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Secure Stronghold",
+      "Type": "Castle",
+      "Target": 0,
+      "Gold": 0,
+      "Points": 0,
+      "Rules": "Location acts as Town for this turn",
+      "Flavour": "",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Lonely Birdman",
+      "Type": "Flying Warrior",
+      "Target": 5,
+      "Gold": 3,
+      "Points": 3,
+      "Rules": "On win: on 1d6 5+ returned to deck",
+      "Flavour": "",
+      "Duplicates": 1
+    }
+  ],
+  "Dungeon Lvl 3": [
+    {
+      "Title": "Deprived Succubus",
+      "Type": "Demonic Monster",
+      "Target": 6,
+      "Gold": 0,
+      "Points": 6,
+      "Rules": "On loss: no damage but fight again next turn",
+      "Flavour": "",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Serene Way",
+      "Type": "Minor God",
+      "Target": 5,
+      "Gold": 0,
+      "Points": 8,
+      "Rules": "On win: any player may take 1 dmg to put it back in deck",
+      "Flavour": "",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Alarmed Knight",
+      "Type": "Human Warrior",
+      "Target": 6,
+      "Gold": 0,
+      "Points": 6,
+      "Rules": "On loss: take four damage",
+      "Flavour": "",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Furious Runes",
+      "Type": "Location",
+      "Target": 0,
+      "Gold": 0,
+      "Points": 5,
+      "Rules": "Roll die for each equipped item, discard if below 4",
+      "Flavour": "",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Quaking Magma",
+      "Type": "Event",
+      "Target": 0,
+      "Gold": 0,
+      "Points": 3,
+      "Rules": "Each player takes two damage",
+      "Flavour": "",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Woeful Dryad",
+      "Type": "Undead Tree Monster",
+      "Target": 6,
+      "Gold": 0,
+      "Points": 6,
+      "Rules": "On loss: steals a card from victory pile (opponent's choice)",
+      "Flavour": "",
+      "Duplicates": 1
+    }
+  ],
+  "Gear": [
+    {
+      "Title": "Brittle Dagger",
+      "Price": 1,
+      "Rules": "Reroll one attack die; discard on 1, 2 or 3",
+      "Duplicates": 3
+    },
+    {
+      "Title": "Warm Potion",
+      "Price": 2,
+      "Rules": "Discard to gain 2 health",
+      "Duplicates": 2
+    },
+    {
+      "Title": "Thirsty Sword",
+      "Price": 5,
+      "Rules": "Reroll one attack die; discard on 1; On win: gain 1 health",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Wary Helmet",
+      "Price": 4,
+      "Rules": "Prevent damage from battle; roll to see if breaks (1,2,3)",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Reassuring Sphere",
+      "Price": 3,
+      "Rules": "Prevent another item from breaking; roll if it breaks instead (1,2)",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Unflinching Sword",
+      "Price": 9,
+      "Rules": "Add 1 to all combat rolls; reroll two attack dice",
+      "Duplicates": 2
+    },
+    {
+      "Title": "Receptive Gem",
+      "Price": 4,
+      "Rules": "Cast spell without discarding; roll if it breaks (1,2)",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Shy Mask",
+      "Price": 2,
+      "Rules": "Avoid a battle; roll if lost (1,2,3)",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Scroll of Town Portal",
+      "Price": 3,
+      "Rules": "Discard to return to town",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Scroll of Teleport",
+      "Price": 4,
+      "Rules": "Discard to move up to 6 spaces forwards or backwards",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Scroll of Smiting",
+      "Price": 3,
+      "Rules": "Discard to roll a 6 in combat",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Ravenous Staff",
+      "Price": 8,
+      "Rules": "Take one damage to cast a spell without discarding",
+      "Duplicates": 1
+    },
+    {
+      "Title": "Nervous Boots",
+      "Price": 4,
+      "Rules": "Escape a lost battle; roll if lost (1,2)",
+      "Duplicates": 1
+    }
+  ]
+}
