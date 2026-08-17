@@ -6,4 +6,5 @@ namespace Sektor.TurnBased.UI.ViewModels.Navigation;
 public static class Pages
 {
     public const string Lobby = "lobby";
+    public const string MultiplayerLobby = "multiplayer_lobby";
 }

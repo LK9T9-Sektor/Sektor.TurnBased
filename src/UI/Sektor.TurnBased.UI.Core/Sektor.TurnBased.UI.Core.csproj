@@ -11,6 +11,7 @@
     <ProjectReference Include="..\..\Core\Sektor.TurnBased.Core\Sektor.TurnBased.Core.csproj" />
     <ProjectReference Include="..\..\Battle\Sektor.TurnBased.Battle\Sektor.TurnBased.Battle.csproj" />
     <ProjectReference Include="..\..\Dialog\Sektor.TurnBased.Dialog\Sektor.TurnBased.Dialog.csproj" />
+    <ProjectReference Include="..\..\Network\Sektor.Network.Abstractions\Sektor.Network.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

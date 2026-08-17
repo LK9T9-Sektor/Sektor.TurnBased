@@ -11,6 +11,9 @@ namespace Sektor.TurnBased.Battle.Content;
 /// </summary>
 public static class BattleContentCatalog
 {
+    /// <summary>Id героев, доступных игроку для выбора в мультиплеере.</summary>
+    public static readonly string[] PlayerHeroIds = ["hero_warrior", "hero_rogue", "hero_archer", "hero_priestess"];
+
     public static Result<BattleContent> Build(ContentRegistry content)
     {
         var failures = new List<string>();
@@ -104,6 +107,12 @@ public static class BattleContentCatalog
                 new Dictionary<string, int> { ["health"] = 20, ["attack"] = 6, ["armor"] = 0, ["initiative"] = 6 },
                 new[] { "basic_attack", "heal" }),
         };
+
+        foreach (string heroId in PlayerHeroIds)
+        {
+            if (!templates.Any(t => t.Id == heroId))
+                failures.Add($"Hero '{heroId}' from PlayerHeroIds is not registered.");
+        }
 
         foreach (var stat in stats)
             Add(content, stat.Id, stat, failures);

@@ -6,6 +6,7 @@ using Sektor.TurnBased.Battle.Model;
 using Sektor.TurnBased.Core;
 using Sektor.TurnBased.Core.Abstractions;
 using Sektor.TurnBased.UI.Core;
+using Sektor.TurnBased.UI.Core.Multiplayer;
 using Sektor.TurnBased.UI.ViewModels.Navigation;
 using Sektor.TurnBased.UI.ViewModels.Shared;
 
@@ -14,9 +15,10 @@ namespace Sektor.TurnBased.UI.ViewModels.Battle;
 /// <summary>
 /// VM боя: обновляет снапшот, карточки юнитов и статус, проигрывает визуальные
 /// события поочерёдно и управляет выбором действия и цели с подтверждением.
+/// В мультиплеере применяет входящие команды через Update (таймер) и обновляет экран.
 /// Общение только через INPC и команды, без событий и messenger.
 /// </summary>
-public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
+public sealed partial class BattleViewModel : ObservableObject, IGameViewModel, IUpdatable
 {
     private static readonly TimeSpan VisualDelay = TimeSpan.FromMilliseconds(140);
 
@@ -30,6 +32,7 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
     private const int FloatingFps = 30;
 
     private readonly BattleSession _session;
+    private readonly INetworkedBattleSession? _networked;
     private readonly NavigationManager _navigation;
     private readonly UnitInfoViewModel _unitInfo;
     private readonly AbilityInfoViewModel _abilityInfo;
@@ -98,6 +101,9 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
         SettingsViewModel settings)
     {
         _session = session;
+        _networked = session as INetworkedBattleSession;
+        if (_networked is not null)
+            _networked.StateChanged += OnRemoteStateChanged;
         _navigation = navigation;
         _unitInfo = unitInfo;
         _abilityInfo = abilityInfo;
@@ -117,6 +123,14 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
 
     /// <summary>Запускает бой и проигрывает стартовые визуальные события.</summary>
     public Task RunAsync() => StepAsync(_session.Start);
+
+    /// <summary>
+    /// Периодический апдейт (таймер хоста): прокачивает транспорт и применяет
+    /// входящие команды в мультиплеере.
+    /// </summary>
+    public void Update() => _networked?.Update();
+
+    private void OnRemoteStateChanged() => _ = StepRemoteAsync();
 
     [RelayCommand]
     private void ShowUnitInfo(UnitCardViewModel? card)
@@ -205,11 +219,10 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
         && !IsAwaitingTarget
         && IsPlayerTurn;
 
-    private bool IsPlayerTurn =>
-        Snapshot?.Actors.FirstOrDefault(a => a.RuntimeId == Snapshot.CurrentActorId)?.ControlledBy == "player";
+    private bool IsPlayerTurn => Snapshot?.IsLocalTurn ?? false;
 
     private string PlayerTeamId =>
-        Snapshot?.Actors.FirstOrDefault(a => a.ControlledBy == "player")?.TeamId ?? "player";
+        Snapshot?.Actors.FirstOrDefault(a => a.IsHumanControlled)?.TeamId ?? "player";
 
     private IReadOnlyList<string>? ResolveTargets(ActionOption option)
     {
@@ -253,13 +266,35 @@ public sealed partial class BattleViewModel : ObservableObject, IGameViewModel
                 return;
             }
 
-            await AnimateVisualsAsync();
-            RefreshSnapshot();
+            await RefreshAfterStepAsync();
         }
         finally
         {
             IsBusy = false;
         }
+    }
+
+    /// <summary>Обновление после применения входящей команды: визуалы уже накоплены сессией.</summary>
+    private async Task StepRemoteAsync()
+    {
+        if (IsBusy)
+            return;
+
+        IsBusy = true;
+        try
+        {
+            await RefreshAfterStepAsync();
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    private async Task RefreshAfterStepAsync()
+    {
+        await AnimateVisualsAsync();
+        RefreshSnapshot();
     }
 
     private async Task AnimateVisualsAsync()

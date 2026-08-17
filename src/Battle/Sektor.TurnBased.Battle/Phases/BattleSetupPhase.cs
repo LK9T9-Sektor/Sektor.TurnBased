@@ -6,26 +6,33 @@ using Sektor.TurnBased.Core.Abstractions;
 namespace Sektor.TurnBased.Battle.Phases;
 
 /// <summary>
-/// Фаза настройки боя: создаёт акторов из шаблонов и добавляет в состояние.
+/// Фаза настройки боя: создаёт акторов по ростеру спавнов и добавляет в состояние.
+/// Ростер определяет состав боя (слоты игроков + AI); по умолчанию — все шаблоны.
 /// Порядок ходов не вычисляется здесь — его пересчитывает RoundStart.
 /// </summary>
 public sealed class BattleSetupPhase : IGamePhase
 {
     private readonly BattleState _state;
     private readonly BattleContent _content;
+    private readonly IReadOnlyList<BattleSpawn> _spawns;
 
     public string Id => BattlePhaseIds.Setup;
 
-    public BattleSetupPhase(BattleState state, BattleContent content)
+    public BattleSetupPhase(BattleState state, BattleContent content, IReadOnlyList<BattleSpawn> spawns)
     {
         _state = state;
         _content = content;
+        _spawns = spawns;
     }
 
     public Result<PhaseTransition> Execute(GameContext context)
     {
-        foreach (var template in _content.Templates)
+        foreach (var spawn in _spawns)
         {
+            var template = _content.Templates.FirstOrDefault(t => t.Id == spawn.TemplateId);
+            if (template is null)
+                return Result<PhaseTransition>.Failure($"Spawn references unknown template '{spawn.TemplateId}'.");
+
             var resources = new ResourceContainer(_state.Definitions);
             foreach (var pair in template.BaseStats)
             {
@@ -35,10 +42,10 @@ public sealed class BattleSetupPhase : IGamePhase
             }
 
             var actor = new BattleActor(
-                _state.NewActorId(template.Id),
-                template.TeamId,
-                template.Id,
-                template.ControlledBy,
+                _state.NewActorId(spawn.TemplateId),
+                spawn.TeamId,
+                spawn.TemplateId,
+                spawn.ControlledBy,
                 resources);
 
             _state.AddActor(actor);
@@ -47,9 +54,9 @@ public sealed class BattleSetupPhase : IGamePhase
                 EventType = "Spawn",
                 SourceRuntimeId = actor.RuntimeId,
                 TargetRuntimeId = actor.RuntimeId,
-                Payload = template.TeamId,
+                Payload = spawn.TeamId,
             });
-            context.Log.Append($"{actor.RuntimeId} ({template.Id}) joined team {template.TeamId}");
+            context.Log.Append($"{actor.RuntimeId} ({spawn.TemplateId}) joined team {spawn.TeamId}");
         }
 
         return Result<PhaseTransition>.Success(PhaseTransition.Next(BattlePhaseIds.RoundStart));

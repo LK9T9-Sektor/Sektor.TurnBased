@@ -4,6 +4,7 @@
                     xmlns:vmLobby="clr-namespace:Sektor.TurnBased.UI.ViewModels.Lobby;assembly=Sektor.TurnBased.UI.ViewModels"
                     xmlns:vmBattle="clr-namespace:Sektor.TurnBased.UI.ViewModels.Battle;assembly=Sektor.TurnBased.UI.ViewModels"
                     xmlns:vmDialog="clr-namespace:Sektor.TurnBased.UI.ViewModels.Dialog;assembly=Sektor.TurnBased.UI.ViewModels"
+                    xmlns:vmMultiplayer="clr-namespace:Sektor.TurnBased.UI.ViewModels.Multiplayer;assembly=Sektor.TurnBased.UI.ViewModels"
                     xmlns:views="clr-namespace:Sektor.TurnBased.UI.Wpf.Views"
                     xmlns:converters="clr-namespace:Sektor.TurnBased.UI.Wpf.Theme"
                     xmlns:controls="clr-namespace:Sektor.TurnBased.UI.Wpf.Controls">
@@ -86,6 +87,9 @@
     <converters:TeamToBrushConverter x:Key="TeamToBrush"
                                     Player="{StaticResource PlayerBrush}"
                                     Enemy="{StaticResource EnemyBrush}" />
+    <converters:PlayerOrTeamBrushConverter x:Key="PlayerOrTeamBrush"
+                                           Player="{StaticResource PlayerBrush}"
+                                           Enemy="{StaticResource EnemyBrush}" />
     <converters:StringToBrushConverter x:Key="StringToBrush" />
     <converters:IconKeyToGeometryConverter x:Key="IconToGeometry" />
 
@@ -338,7 +342,7 @@
             <Border.Style>
                 <Style TargetType="Border" BasedOn="{StaticResource UnitCard}">
                     <Setter Property="Background" Value="{StaticResource PanelDarkBrush}" />
-                    <Setter Property="BorderBrush" Value="{Binding Unit.TeamId, Converter={StaticResource TeamToBrush}}" />
+                    <Setter Property="BorderBrush" Value="{Binding Unit, Converter={StaticResource PlayerOrTeamBrush}}" />
                     <Setter Property="BorderThickness" Value="1.5" />
                     <Setter Property="Cursor" Value="Hand" />
                     <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
@@ -441,6 +445,11 @@
                 <TextBlock Text="{Binding Unit.TeamDisplayName}"
                            Style="{StaticResource MutedText}"
                            Margin="0,2,0,6" />
+                <TextBlock Text="{Binding Unit.PlayerName}"
+                           FontWeight="Bold"
+                           Foreground="{Binding Unit.PlayerColorHex, Converter={StaticResource StringToBrush}}"
+                           Margin="0,0,0,6"
+                           Visibility="{Binding Unit.PlayerName, Converter={StaticResource NotNullToVisibility}}" />
                 <ProgressBar Height="8"
                              Value="{Binding Unit.VitalStat.Current}"
                              Maximum="{Binding Unit.VitalStat.Max}"
@@ -719,6 +728,9 @@
     </DataTemplate>
     <DataTemplate DataType="{x:Type vmDialog:DialogViewModel}">
         <views:DialogView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vmMultiplayer:MultiplayerLobbyViewModel}">
+        <views:MultiplayerLobbyView />
     </DataTemplate>
 
 </ResourceDictionary>

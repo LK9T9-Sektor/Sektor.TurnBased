@@ -1,9 +1,13 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using Sektor.Network.Abstractions.Lobby;
+using Sektor.Network.Steam;
 using Sektor.TurnBased.Core.Abstractions;
 using Sektor.TurnBased.UI.Core;
+using Sektor.TurnBased.UI.Core.Multiplayer;
 using Sektor.TurnBased.UI.ViewModels.Battle;
 using Sektor.TurnBased.UI.ViewModels.Dialog;
 using Sektor.TurnBased.UI.ViewModels.Lobby;
+using Sektor.TurnBased.UI.ViewModels.Multiplayer;
 using Sektor.TurnBased.UI.ViewModels.Shared;
 
 namespace Sektor.TurnBased.UI.ViewModels.Navigation;
@@ -34,6 +38,9 @@ public sealed class RootViewModel : ObservableObject
     /// <summary>Лобби (первая страница).</summary>
     public LobbyViewModel Lobby { get; }
 
+    /// <summary>Мультиплеер-лобби.</summary>
+    public MultiplayerLobbyViewModel MultiplayerLobby { get; }
+
     public RootViewModel(
         NavigationManager navigation,
         UnitInfoViewModel unitInfo,
@@ -57,6 +64,13 @@ public sealed class RootViewModel : ObservableObject
 
         Lobby = new LobbyViewModel(navigation, sessionFactory, CreateGameViewModel);
         Navigation.Register(Pages.Lobby, Lobby);
+
+        var transport = new SteamTransport(new JsonTransportCodec());
+        var coordinator = new LobbyCoordinator(transport);
+        var battleLobby = new BattleLobbySession(coordinator);
+        MultiplayerLobby = new MultiplayerLobbyViewModel(navigation, battleLobby, CreateGameViewModel);
+        Navigation.Register(Pages.MultiplayerLobby, MultiplayerLobby);
+
         Navigation.NavigateTo(Pages.Lobby);
     }
 

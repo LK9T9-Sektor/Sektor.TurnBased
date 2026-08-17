@@ -88,6 +88,12 @@
                     HorizontalAlignment="Center"
                     Margin="0,24,0,0"
                     Padding="32,10" />
+            <Button Content="Мультиплеер"
+                    Command="{Binding GoToMultiplayerCommand}"
+                    Style="{StaticResource NeutralButton}"
+                    HorizontalAlignment="Center"
+                    Margin="0,12,0,0"
+                    Padding="32,10" />
             <TextBlock Text="Кооп-режим появится позже."
                        Style="{StaticResource MutedText}"
                        Margin="0,20,0,0"

@@ -28,6 +28,7 @@ public sealed class BattleEngine
     /// <summary>
     /// Создаёт бой: валидирует контент, резолвит правила и регистрирует фазы.
     /// defaultOrderRules/defaultWinConditions — встроенные стратегии, если не переданы.
+    /// spawns — ростер состава боя; по умолчанию — все шаблоны каталога.
     /// </summary>
     public static Result<BattleEngine> Create(
         GameContext context,
@@ -35,7 +36,8 @@ public sealed class BattleEngine
         BattleContent battleContent,
         BattleConfig config,
         IEnumerable<IOrderRule>? defaultOrderRules = null,
-        IEnumerable<IWinCondition>? defaultWinConditions = null)
+        IEnumerable<IWinCondition>? defaultWinConditions = null,
+        IEnumerable<BattleSpawn>? spawns = null)
     {
         if (context is null)
             return Result<BattleEngine>.Failure("GameContext cannot be null.");
@@ -67,7 +69,11 @@ public sealed class BattleEngine
 
         var pipeline = new GamePipeline(context);
 
-        var registerResult = pipeline.Register(new BattleSetupPhase(state, battleContent));
+        var spawnList = spawns is null
+            ? battleContent.Templates.Select(t => new BattleSpawn(t.Id, t.TeamId, t.ControlledBy)).ToList()
+            : spawns.ToList();
+
+        var registerResult = pipeline.Register(new BattleSetupPhase(state, battleContent, spawnList));
         if (registerResult.IsFailure)
             return Result<BattleEngine>.Failure(registerResult.Error!);
 

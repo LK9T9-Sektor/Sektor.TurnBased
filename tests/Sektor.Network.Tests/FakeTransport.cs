@@ -16,7 +16,6 @@ public sealed class FakeTransport : ITransport
     public event Action<string>? PlayerJoined;
     public event Action<string>? PlayerLeft;
     public event Action<TransportMessage>? MessageReceived;
-    public event Action<string>? SessionInviteReceived;
     public event Action? Disconnected;
 
     public string LocalPlayerId { get; } = "local_player";

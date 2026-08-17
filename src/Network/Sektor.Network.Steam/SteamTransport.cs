@@ -19,7 +19,6 @@ public sealed class SteamTransport : ITransport
     private readonly ITransportCodec _codec;
 
     private readonly Callback<LobbyCreated_t> _lobbyCreatedCallback;
-    private readonly Callback<GameLobbyJoinRequested_t> _lobbyJoinRequestedCallback;
     private readonly Callback<LobbyEnter_t> _lobbyEnterCallback;
     private readonly Callback<LobbyChatUpdate_t> _lobbyChatUpdateCallback;
     private readonly Callback<P2PSessionRequest_t> _p2pSessionRequestCallback;
@@ -40,9 +39,6 @@ public sealed class SteamTransport : ITransport
     public event Action<TransportMessage>? MessageReceived;
 
     /// <inheritdoc />
-    public event Action<string>? SessionInviteReceived;
-
-    /// <inheritdoc />
     public event Action? Disconnected;
 
     /// <inheritdoc />
@@ -60,7 +56,6 @@ public sealed class SteamTransport : ITransport
         _codec = codec;
 
         _lobbyCreatedCallback = Callback<LobbyCreated_t>.Create(HandleLobbyCreated);
-        _lobbyJoinRequestedCallback = Callback<GameLobbyJoinRequested_t>.Create(HandleLobbyJoinRequested);
         _lobbyEnterCallback = Callback<LobbyEnter_t>.Create(HandleLobbyEnter);
         _lobbyChatUpdateCallback = Callback<LobbyChatUpdate_t>.Create(HandleLobbyChatUpdate);
         _p2pSessionRequestCallback = Callback<P2PSessionRequest_t>.Create(HandleP2PSessionRequest);
@@ -205,11 +200,6 @@ public sealed class SteamTransport : ITransport
         SteamFriends.SetRichPresence("connect", $"steam://joinlobby/480/{_currentLobbyId.m_SteamID}");
 
         SessionJoined?.Invoke(_currentLobbyId.m_SteamID.ToString());
-    }
-
-    private void HandleLobbyJoinRequested(GameLobbyJoinRequested_t callback)
-    {
-        SessionInviteReceived?.Invoke(callback.m_steamIDLobby.m_SteamID.ToString());
     }
 
     private void HandleLobbyEnter(LobbyEnter_t callback)

@@ -3,6 +3,7 @@ namespace Sektor.TurnBased.UI.Core;
 /// <summary>
 /// Снимок состояния боя для отображения: раунд, текущий актор, порядок ходов,
 /// все акторы и доступные действия текущего игрока. Не содержит ссылок на движок.
+/// IsLocalTurn — ход локального игрока (в одиночной игре — любой человеческий актор).
 /// </summary>
 public sealed record BattleSnapshot(
     string PhaseId,
@@ -12,4 +13,5 @@ public sealed record BattleSnapshot(
     string? WinnerTeamId,
     IReadOnlyList<string> TurnOrder,
     IReadOnlyList<UnitSnapshot> Actors,
-    IReadOnlyList<ActionOption> AvailableActions);
+    IReadOnlyList<ActionOption> AvailableActions,
+    bool IsLocalTurn = false);

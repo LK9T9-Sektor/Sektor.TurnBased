@@ -22,9 +22,6 @@ public interface ITransport : IDisposable
     /// <summary>Fires when a message is received from a remote peer.</summary>
     event Action<TransportMessage>? MessageReceived;
 
-    /// <summary>Fires when a Steam-style session invite is received. Payload: session id.</summary>
-    event Action<string>? SessionInviteReceived;
-
     /// <summary>Fires on unexpected disconnect or session loss.</summary>
     event Action? Disconnected;
 

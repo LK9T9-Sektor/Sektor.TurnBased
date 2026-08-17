@@ -8,8 +8,8 @@ namespace Sektor.TurnBased.Battle.Phases;
 
 /// <summary>
 /// Фаза хода актора: выбирает текущего живого и не заблокированного актора.
-/// Герой (ControlledBy "player") — приостановка до команды; враг — ход через AI.
-/// После каждого хода проверяется условие победы и конец порядка.
+/// Человек (ControlledBy "player" или слот "player_N") — приостановка до команды;
+/// враг — ход через AI. После каждого хода проверяется условие победы и конец порядка.
 /// </summary>
 public sealed class ActorTurnPhase : IGamePhase
 {
@@ -70,7 +70,7 @@ public sealed class ActorTurnPhase : IGamePhase
                 continue;
             }
 
-            if (actor.ControlledBy == "player")
+            if (actor.IsHumanControlled)
                 return Result<PhaseTransition>.Success(PhaseTransition.Suspend("awaiting_command"));
 
             var command = _ai.ChooseCommand(currentId);

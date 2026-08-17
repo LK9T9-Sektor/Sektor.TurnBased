@@ -109,4 +109,10 @@ public sealed partial class LobbyViewModel : ObservableObject
             hash = unchecked(hash * 31 + ch);
         return hash;
     }
+
+    [RelayCommand]
+    private void GoToMultiplayer()
+    {
+        _navigation.NavigateTo(Pages.MultiplayerLobby);
+    }
 }

@@ -71,7 +71,7 @@ public abstract class GameSession
     }
 
     /// <summary>Передаёт команду игрока и продвигает пайплайн до следующего ввода.</summary>
-    public Result Submit(IGameCommand command)
+    public virtual Result Submit(IGameCommand command)
     {
         var processed = _pipeline.ProcessCommand(command);
         if (processed.IsFailure)

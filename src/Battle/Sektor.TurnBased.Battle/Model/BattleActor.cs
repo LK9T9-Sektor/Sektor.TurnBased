@@ -17,6 +17,9 @@ public sealed class BattleActor
     public ResourceContainer Resources { get; }
     public IReadOnlyList<BattleStatus> Statuses => _statuses;
 
+    /// <summary>Управляется человеком: слот (player_N) или одиночный игрок (player).</summary>
+    public bool IsHumanControlled => ControlledBy != "ai";
+
     public BattleActor(
         string runtimeId,
         string teamId,

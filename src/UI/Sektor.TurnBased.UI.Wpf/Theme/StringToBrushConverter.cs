@@ -12,7 +12,7 @@ public sealed class StringToBrushConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is string hex && TryParse(hex, out var color))
+        if (value is string hex && TryParseHex(hex, out var color))
             return new SolidColorBrush(color);
 
         return Brushes.Gray;
@@ -21,7 +21,8 @@ public sealed class StringToBrushConverter : IValueConverter
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) =>
         Binding.DoNothing;
 
-    private static bool TryParse(string hex, out Color color)
+    /// <summary>Разбирает HEX-цвет ("#RRGGBB" или "#AARRGGBB"). Публичный для переиспользования.</summary>
+    public static bool TryParseHex(string hex, out Color color)
     {
         color = Colors.Transparent;
         if (string.IsNullOrEmpty(hex) || hex[0] != '#' || hex.Length is not (7 or 9))

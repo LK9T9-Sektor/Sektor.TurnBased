@@ -13,6 +13,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sektor.TurnBased.UI.Core\Sektor.TurnBased.UI.Core.csproj" />
+    <ProjectReference Include="..\..\Network\Sektor.Network.Steam\Sektor.Network.Steam.csproj" />
+    <ProjectReference Include="..\..\Network\Sektor.Network.Abstractions\Sektor.Network.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

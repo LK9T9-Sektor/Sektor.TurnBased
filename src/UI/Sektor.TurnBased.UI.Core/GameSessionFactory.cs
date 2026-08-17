@@ -1,8 +1,11 @@
+using Sektor.Network.Abstractions.Lobby;
 using Sektor.TurnBased.Battle.Content;
+using Sektor.TurnBased.Battle.Model;
 using Sektor.TurnBased.Battle.Rules;
 using Sektor.TurnBased.Core;
 using Sektor.TurnBased.Core.Abstractions;
 using Sektor.TurnBased.Dialog.Content;
+using Sektor.TurnBased.UI.Core.Multiplayer;
 
 namespace Sektor.TurnBased.UI.Core;
 
@@ -52,6 +55,57 @@ public static class GameSessionFactory
             return Result<GameSession>.Failure($"Unknown game kind '{gameKind}'.");
 
         return builder(context, content);
+    }
+
+    /// <summary>
+    /// Создаёт мультиплеерный бой (lockstep): один seed у всех клиентов, ростер из
+    /// назначений (герои по слотам player_N) плюс AI-враги из каталога. Команды
+    /// идут через BattleCommandChannel координатора лобби.
+    /// </summary>
+    public static Result<GameSession> CreateMultiplayerBattle(
+        int seed,
+        IReadOnlyList<PlayerAssignment> assignments,
+        IReadOnlyList<PlayerPresentation> presentations,
+        LobbyCoordinator coordinator,
+        int? localSlot = null)
+    {
+        var content = new ContentRegistry();
+        var context = new GameContext(new SessionState(), rng: new DeterministicRng(seed), content: content);
+
+        var battleContent = BattleContentCatalog.Build(content);
+        if (battleContent.IsFailure)
+            return Result<GameSession>.Failure(battleContent.Error!);
+
+        var spawns = BuildSpawns(assignments, battleContent.Value!);
+        var channel = new BattleCommandChannel(coordinator);
+        var session = NetworkedBattleSession.Create(
+            context,
+            content,
+            battleContent.Value!,
+            new BattleConfig("initiative", "extermination", CritChance: 0.15, CritMultiplier: 1.5),
+            spawns,
+            presentations,
+            localSlot,
+            DefaultDisplayNames,
+            channel);
+        return session.TryGetValue(out var value)
+            ? Result<GameSession>.Success(value)
+            : Result<GameSession>.Failure(session.Error!);
+    }
+
+    private static IReadOnlyList<BattleSpawn> BuildSpawns(
+        IReadOnlyList<PlayerAssignment> assignments,
+        BattleContent battleContent)
+    {
+        var spawns = new List<BattleSpawn>();
+        for (int i = 0; i < assignments.Count; i++)
+            spawns.Add(new BattleSpawn(assignments[i].ClassId, "player", $"player_{i}"));
+        foreach (var template in battleContent.Templates)
+        {
+            if (template.ControlledBy == "ai")
+                spawns.Add(new BattleSpawn(template.Id, template.TeamId, template.ControlledBy));
+        }
+        return spawns;
     }
 
     private static Result<GameSession> BuildBattle(string kind, GameContext context, ContentRegistry content)
