@@ -14,10 +14,15 @@
     <Project Path="src/UI/Sektor.TurnBased.UI.ViewModels/Sektor.TurnBased.UI.ViewModels.csproj" />
     <Project Path="src/UI/Sektor.TurnBased.UI.Wpf/Sektor.TurnBased.UI.Wpf.csproj" />
   </Folder>
+  <Folder Name="/Network/">
+    <Project Path="src/Network/Sektor.Network.Abstractions/Sektor.Network.Abstractions.csproj" />
+    <Project Path="src/Network/Sektor.Network.Steam/Sektor.Network.Steam.csproj" />
+  </Folder>
   <Folder Name="/Tests/">
     <Project Path="tests/Sektor.TurnBased.Core.Tests/Sektor.TurnBased.Core.Tests.csproj" />
     <Project Path="tests/Sektor.TurnBased.Battle.Tests/Sektor.TurnBased.Battle.Tests.csproj" />
     <Project Path="tests/Sektor.TurnBased.Dialog.Tests/Sektor.TurnBased.Dialog.Tests.csproj" />
     <Project Path="tests/Sektor.TurnBased.UI.Core.Tests/Sektor.TurnBased.UI.Core.Tests.csproj" />
+    <Project Path="tests/Sektor.Network.Tests/Sektor.Network.Tests.csproj" />
   </Folder>
 </Solution>
